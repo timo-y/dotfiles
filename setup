@@ -15,10 +15,9 @@ packages=(
 )
 
 # Iterate over the array and install each package
-sudo apt update
 for package in "${packages[@]}"; do
   echo "Installing $package..."
-  sudo apt-get install -y "$package"
+  /home/linuxbrew/.linuxbrew/bin/brew install "$package"
 done
 
 echo "All packages have been installed."
