@@ -6,6 +6,7 @@ mkdir -p "$XDG_CONFIG_HOME"
 
 # Make links
 ln -sf "$PWD/.bashrc" "$HOME"/.bashrc
+ln -sf "$PWD/config.nix" "$XDG_CONFIG_HOME"/nixpkgs/config.nix
 
 # Clone nvim config
 echo "Cloning nvim config from repo"
@@ -13,14 +14,6 @@ git clone https://github.com/timo-y/nvim.git "$XDG_CONFIG_HOME"/nvim
 echo "Nvim config cloned."
 
 # Install dependencies
-packages=(
-  ripgrep,
-  npm
-)
-# Iterate over the array and install each package
-for package in "${packages[@]}"; do
-  echo "Installing $package..."
-  /home/linuxbrew/.linuxbrew/bin/brew install "$package"
-done
-
+echo "Install packages via nix"
+nix-env -iA nixpkgs.myPackages
 echo "All packages have been installed."
