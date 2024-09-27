@@ -20,6 +20,6 @@ nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs
 nix-channel --update
 
 # Install `myPackages` defined in config.nix
-nix-env -f "$XDG_CONFIG_HOME/nixpkgs/config.nix" -iA myPackages
+nix-env -iA nixpkgs.myPackages
 
 echo "All packages have been installed."
