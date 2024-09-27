@@ -11,7 +11,8 @@ echo "Nvim config cloned."
 
 # Install dependencies
 packages=(
-  ripgrep
+  ripgrep,
+  npm
 )
 
 # Iterate over the array and install each package
