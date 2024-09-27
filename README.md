@@ -16,7 +16,7 @@ Additionally the projects `.devcontainer.json` needs to contain the following pa
 ```
 
 # Usage
-Install devpod local machine, `cd` into your project-dir (containing the `.devcontainer`-dir or the `.devcontainer.json`) and run
+In the console `cd` into your project-dir (containing the `.devcontainer`-dir or the `.devcontainer.json`) and run
 ```bash
 devpod up . --provider docker --dotfiles https://github.com/timo-y/dotfiles.git
 ```
