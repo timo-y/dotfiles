@@ -5,6 +5,7 @@ my devpod dotfile repo
 On the local machine 
 - [docker](https://www.docker.com/products/docker-desktop/)
 - [devpod](https://devpod.sh/)
+
 need to be installed.
 
 Additionally the projects `.devcontainer.json` needs to contain the following part in order to add _nix_ as a feature:
