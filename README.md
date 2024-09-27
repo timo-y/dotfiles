@@ -2,9 +2,12 @@
 my devpod dotfile repo
 
 # Requirements
-On the local machine _docker_ needs to be installed.
+On the local machine 
+- [docker](https://www.docker.com/products/docker-desktop/)
+- [devpod](https://devpod.sh/)
+need to be installed.
 
-Additionailly in the project in the `.devcontainer.json` the following part has to be included to add _nix_ as a feature:
+Additionally the projects `.devcontainer.json` needs to contain the following part in order to add _nix_ as a feature:
 ```json
 "features": {
          "ghcr.io/devcontainers/features/nix:1": {}
