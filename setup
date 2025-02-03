@@ -7,6 +7,7 @@ mkdir -p "$XDG_CONFIG_HOME"/nixpkgs
 
 # Make links
 ln -sf "$PWD/.bashrc" "$HOME"/.bashrc
+ln -sf "$PWD/.zshrc " "$HOME"/.zshrc
 ln -sf "$PWD/config.nix" "$XDG_CONFIG_HOME"/nixpkgs/config.nix
 
 # Clone nvim config
