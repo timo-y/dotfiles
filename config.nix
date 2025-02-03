@@ -4,6 +4,7 @@
       name = "timo-tools";
       paths = [
       pkgs.neovim
+      pkgs.zsh
       pkgs.nodejs_22
       pkgs.fd
       pkgs.ripgrep
