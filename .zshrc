@@ -1,0 +1,4 @@
+export ZSH="$HOME/.nix-profile/share/oh-my-zsh"
+ZSH_THEME="robbyrussell"
+plugins=(git)
+source $ZSH/oh-my-zsh.sh
