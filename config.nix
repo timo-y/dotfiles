@@ -3,14 +3,16 @@
     myPackages = pkgs.buildEnv {
       name = "timo-tools";
       paths = [
-      pkgs.neovim
-      pkgs.zsh
-      pkgs.nodejs_22
-      pkgs.fd
-      pkgs.ripgrep
-      pkgs.fzf
-      pkgs.lazygit
+        neovim
+        zsh
+        nodejs_22
+        fd
+        ripgrep
+        fzf
+        lazygit
+        git
+        oh-my-zsh
       ];
     };
   };
-}
+};
