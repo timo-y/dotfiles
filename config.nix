@@ -5,13 +5,13 @@
       paths = [
         neovim
         zsh
+        oh-my-zsh
         nodejs_22
         fd
         ripgrep
         fzf
-        lazygit
         git
-        oh-my-zsh
+        lazygit
       ];
     };
   };
