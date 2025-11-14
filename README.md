@@ -13,13 +13,6 @@ On the local machine
 
 need to be installed.
 
-Additionally the projects `.devcontainer.json` needs to contain the following part in order to add _nix_ as a feature:
-```json
-"features": {
-         "ghcr.io/devcontainers/features/nix:1": {}
-     },
-```
-
 ### Usage
 In the console `cd` into your project-dir (containing the `.devcontainer`-dir or the `.devcontainer.json`) and run
 ```bash
