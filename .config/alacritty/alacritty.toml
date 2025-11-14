@@ -1,0 +1,14 @@
+# $HOME/.config/alacritty/alacritty.toml
+[window]
+decorations = "Full"
+decorations_theme_variant = "Dark"
+[font]
+normal = { family = "GeistMono Nerd Font", style = "Regular" }
+bold = { family = "GeistMono Nerd Font", style = "Bold" }
+italic = { family = "GeistMono Nerd Font", style = "Italic" }
+bold_italic = { family = "GeistMono Nerd Font", style = "Bold Italic" }
+size = 12.0
+[terminal.shell]
+program = "/usr/bin/zsh"
+# args = ["-l", "-c", "tmux attach || tmux"]
+
