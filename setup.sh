@@ -37,7 +37,7 @@ fi
 
 # Run stow to create symlinks (this will place config.nix in the right location)
 echo "Running GNU Stow to create symlinks..."
-stow -v .
+stow -v --adopt .
 
 # Clone nvim config
 if [ ! -d "$XDG_CONFIG_HOME/nvim" ]; then
