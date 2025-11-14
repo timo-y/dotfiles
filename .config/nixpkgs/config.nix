@@ -15,6 +15,7 @@
         fzf # fuzzy finder
         git
         lazygit # git gui
+        i3status-rust
       ];
     };
   };
