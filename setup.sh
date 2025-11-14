@@ -53,21 +53,31 @@ fi
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                        Nerd Fonts                        │
 #          ╰──────────────────────────────────────────────────────────╯
-declare NERD_FONTS=("GeistMono")
-
+declare -a NERD_FONTS=("GeistMono")
 mkdir -p ~/.local/share/fonts
 
-# ── download and install nerd fonts ───────────────────────────────────
-for font in $NERD_FONTS; do
-    echo "Downloading $font..."
-    mkdir -p ~/.local/share/fonts
-    curl -L https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/$font.zip -o ~/.local/share/fonts/$font.zip
-    unzip ~/.local/share/fonts/$font.zip -d ~/.local/share/fonts
+# ── Download and install each font ────────────────────────────────────
+for font in "${NERD_FONTS[@]}"; do
+    echo "Downloading $font Nerd Font..."
+    
+    # Define zip file path
+    zip_file="$font.zip"
+    zip_path="$HOME/.local/share/fonts/$zip_file"
+    
+    # Download the font
+    curl -L "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/$zip_file" -o "$zip_path"
+    
+    # Unzip into the fonts directory
+    unzip -o "$zip_path" -d "$HOME/.local/share/fonts"
+    
+    # Remove the zip file
+    rm "$zip_path"
 done
 
-# ── refresh font cache ────────────────────────────────────────────────
-fc-cache -f -v
+# ── Refresh font cache ────────────────────────────────────────────────
+fc-cache -fv
 
+echo "Nerd fonts installed and font cache updated."
 
 echo "=== Setup complete! ==="
 echo "Please restart your shell or run 'source ~/.bashrc' or 'source ~/.zshrc'".
