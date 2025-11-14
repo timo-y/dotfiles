@@ -37,7 +37,7 @@ fi
 
 # Run stow to create symlinks (this will place config.nix in the right location)
 echo "Running GNU Stow to create symlinks..."
-stow .
+stow -v .
 
 # Clone nvim config
 if [ ! -d "$XDG_CONFIG_HOME/nvim" ]; then
@@ -53,10 +53,11 @@ echo "Installing packages via Nix..."
 nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs
 nix-channel --update
 
-# Install packages
+# Install `myPackages` defined in config.nix (now stowed to ~/.config/nixpkgs/config.nix)
 nix-env -iA nixpkgs.myPackages
 
 echo "All Nix packages have been installed."
 
 echo "=== Setup complete! ==="
-echo "Please restart your shell or run 'source ~/.bashrc' or 'source ~/.zshrc'"
+echo "Please restart your shell or run 'source ~/.bashrc' or 'source ~/.zshrc'".
+
