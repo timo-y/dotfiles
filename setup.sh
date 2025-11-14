@@ -7,8 +7,8 @@ echo "=== Dotfiles + Dependencies Setup Script ==="
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                       Dependencies                       │
 #          ╰──────────────────────────────────────────────────────────╯
-declare -a ARCH_PACKAGES=("stow" "zsh" "git" "neovim" "alacritty" "fd" "ripgrep" "fzf" "lazygit" "gcc" "nodejs")
-declare -a DEBIAN_PACKAGES=("stow" "zsh" "git" "neovim" "alacritty" "fd-find" "ripgrep" "fzf" "lazygit" "gcc" "nodejs")
+declare -a ARCH_PACKAGES=("stow" "zsh" "git" "neovim" "alacritty" "fd" "ripgrep" "fzf" "lazygit" "gcc" "nodejs" "feh" "i3status-rust")
+declare -a DEBIAN_PACKAGES=("stow" "zsh" "git" "neovim" "alacritty" "fd-find" "ripgrep" "fzf" "lazygit" "gcc" "nodejs" "feh" "i3status-rust")
 declare -a FEDORA_PACKAGES=DEBIAN_PACKAGES
 
 # ── Detect and install ────────────────────────────────────────────────
