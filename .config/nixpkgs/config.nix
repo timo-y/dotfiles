@@ -3,6 +3,7 @@
     myPackages = pkgs.buildEnv {
       name = "timo-tools";
       paths = [
+        (nerdfonts.override { fonts = [ "GeistMono" ]; })
         zsh
         oh-my-zsh
         neovim
