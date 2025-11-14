@@ -3,13 +3,7 @@ My dotfile repo.
 
 # Requirements
 ## Linux
-None, just clone the repo and run the setup.sh script. It will first install Nix, then Stow, then the dotfiles and finally the dependencies in the Nix-config.
-
-You can also use the followng command to clone the repo and run the setup.sh script:
-WARNING: Don't run commands from the internet without checking the code first!
-```bash
-curl -sSL https://raw.githubusercontent.com/timo-y/dotfiles/main/setup.sh | bash
-```
+None, just clone the repo into ~ and run the setup.sh script. It will first install Nix, then Stow, then the dotfiles and finally the dependencies in the Nix-config.
 
 ## Devpod
 
