@@ -6,6 +6,7 @@
         zsh
         oh-my-zsh
         neovim
+        alacritty
         nodejs_22 
         gcc
         fd # find
