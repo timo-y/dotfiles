@@ -8,7 +8,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME="bira"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -103,7 +103,31 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# . "$HOME/.local/bin/env"
+#          ╭──────────────────────────────────────────────────────────╮
+#          │                      History Cache                       │
+#          ╰──────────────────────────────────────────────────────────╯
+HISTSIZE=5000
+HISTFILE=~/.cache/zsh/history
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+
+#          ╭──────────────────────────────────────────────────────────╮
+#          │                           eza                            │
+#          ╰──────────────────────────────────────────────────────────╯
+alias ls="eza --icons --group-directories-first"
+alias ld="eza -D --icons=always --color=always"
+alias lf="eza -f --icons=always --color=always --git-ignore"
+alias ll="eza --icons --group-directories-first -l -b --total-size -g -h"
+alias la='eza -a --color=always --group-directories-first'
+alias lt='eza -aT -L 2 --color=always --group-directories-first'
+alias l.='eza -a | grep -E "^\."'
 
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                        SSH AGENT                         │
