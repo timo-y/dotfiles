@@ -7,9 +7,13 @@ echo "=== Dotfiles + Dependencies Setup Script ==="
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                       Dependencies                       │
 #          ╰──────────────────────────────────────────────────────────╯
-declare -a ARCH_PACKAGES=("stow" "zsh" "tmux" "git" "neovim" "alacritty" "fd" "ripgrep" "fzf" "lazygit" "gcc" "nodejs" "feh" "i3status-rust" "npm" "uv")
-declare -a DEBIAN_PACKAGES=("stow" "zsh" "tmux" "git" "neovim" "alacritty" "fd-find" "ripgrep" "fzf" "lazygit" "gcc" "nodejs" "feh" "i3status-rust" "npm" "uv")
-declare -a FEDORA_PACKAGES=DEBIAN_PACKAGES
+# Common packages
+declare -a COMMON_PACKAGES=("stow" "zsh" "tmux" "git" "neovim" "alacritty" "ripgrep" "fzf" "lazygit" "gcc" "nodejs" "feh" "i3status-rust" "npm" "uv")
+
+# Distro-specific packages 
+declare -a ARCH_PACKAGES=("${COMMON_PACKAGES[@]}" "fd")
+declare -a DEBIAN_PACKAGES=("${COMMON_PACKAGES[@]}" "fd-find")
+declare -a FEDORA_PACKAGES=("${COMMON_PACKAGES[@]}" "fd-find")
 
 # ── Detect and install ────────────────────────────────────────────────
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -30,7 +34,13 @@ else
 fi
 
 # ── install oh-my-zsh ─────────────────────────────────────────────────
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Installing oh-my-zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended
+    echo "Oh-my-zsh installed."
+else
+    echo "Oh-my-zsh already installed, skipping install."
+fi
 
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                          Config                          │
@@ -61,20 +71,24 @@ mkdir -p ~/.local/share/fonts
 
 # ── Download and install each font ────────────────────────────────────
 for font in "${NERD_FONTS[@]}"; do
-    echo "Downloading $font Nerd Font..."
-    
-    # Define zip file path
-    zip_file="$font.zip"
-    zip_path="$HOME/.local/share/fonts/$zip_file"
-    
-    # Download the font
-    curl -L "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/$zip_file" -o "$zip_path"
-    
-    # Unzip into the fonts directory
-    unzip -o "$zip_path" -d "$HOME/.local/share/fonts"
-    
-    # Remove the zip file
-    rm "$zip_path"
+    if ! ls "$HOME/.local/share/fonts/${font}NerdFont"*.otf 1> /dev/null 2>&1; then
+        echo "Downloading $font Nerd Font..."
+        
+        # Define zip file path
+        zip_file="$font.zip"
+        zip_path="$HOME/.local/share/fonts/$zip_file"
+        
+        # Download the font
+        curl -L "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/$zip_file" -o "$zip_path"
+        
+        # Unzip into the fonts directory
+        unzip -o "$zip_path" -d "$HOME/.local/share/fonts"
+        
+        # Remove the zip file
+        rm "$zip_path"
+    else
+        echo "$font Nerd Font already installed."
+    fi
 done
 
 # ── Refresh font cache ────────────────────────────────────────────────

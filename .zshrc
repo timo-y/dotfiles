@@ -103,9 +103,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-#          ╭──────────────────────────────────────────────────────────╮
-#          │                      History Cache                       │
-#          ╰──────────────────────────────────────────────────────────╯
+# History in cache directory
+# History
 HISTSIZE=5000
 HISTFILE=~/.cache/zsh/history
 SAVEHIST=$HISTSIZE
@@ -118,9 +117,7 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 
-#          ╭──────────────────────────────────────────────────────────╮
-#          │                           eza                            │
-#          ╰──────────────────────────────────────────────────────────╯
+## eza
 alias ls="eza --icons --group-directories-first"
 alias ld="eza -D --icons=always --color=always"
 alias lf="eza -f --icons=always --color=always --git-ignore"
@@ -128,6 +125,8 @@ alias ll="eza --icons --group-directories-first -l -b --total-size -g -h"
 alias la='eza -a --color=always --group-directories-first'
 alias lt='eza -aT -L 2 --color=always --group-directories-first'
 alias l.='eza -a | grep -E "^\."'
+
+. "$HOME/.local/bin/env"
 
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                        SSH AGENT                         │
