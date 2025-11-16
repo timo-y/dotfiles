@@ -21,9 +21,9 @@ fi
 
 # Core packages (always installed)
 declare -a CORE_PACKAGES=("stow" "zsh" "tmux" "git" "neovim" "ripgrep" "fzf" "gcc" "nodejs" "npm")
-declare -a CORE_PACKAGES_ARCH=("fd" "lazygit" "eza" "uv")
+declare -a CORE_PACKAGES_ARCH=("fd" "eza")
 declare -a CORE_PACKAGES_DEBIAN=("fd-find")
-declare -a CORE_PACKAGES_FEDORA=("fd-find" "lazygit" "eza" "uv")
+declare -a CORE_PACKAGES_FEDORA=("fd-find" "eza")
 
 # Desktop-only packages
 declare -a DESKTOP_PACKAGES=("nsxiv" "alacritty" "i3status-rust" "xdg-desktop-portal-gnome")
@@ -52,32 +52,17 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
             done
         fi
         
-        # ── Install lazygit from binary (not in standard Debian repos) ────────
-        if ! command -v lazygit &> /dev/null; then
-            echo "Installing lazygit from binary..."
-            LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
-            curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
-            tar xf lazygit.tar.gz lazygit
-            sudo install lazygit -D -t /usr/local/bin/
-            rm lazygit.tar.gz
-        fi
         # ── Install eza from binary (not in standard Debian repos) ────────────
         if ! command -v eza &> /dev/null; then
             echo "Installing eza from binary..."
-            apt install -y cargo
+            sudo apt install -y cargo
             git clone https://github.com/eza-community/eza.git
             cd eza
             cargo install --path .
             cd ..
             rm -rf eza
         fi
-        # ── Install uv from binary (not in standard Debian repos) ─────────────
-        if ! command -v uv &> /dev/null; then
-            echo "Installing uv from binary..."
-            curl -LsSf https://astral.sh/uv/install.sh | sh
-        fi
-        
-        
+        #
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                           ARCH                           │
 #          ╰──────────────────────────────────────────────────────────╯
