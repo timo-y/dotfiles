@@ -4,26 +4,102 @@ set -e  # Exit on error
 
 echo "=== Dotfiles + Dependencies Setup Script ==="
 
+# ── Ask installation type ─────────────────────────────────────────────
+read -p "Is this a desktop installation? (y/n): " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    IS_DESKTOP=true
+    echo "Setting up for desktop environment..."
+else
+    IS_DESKTOP=false
+    echo "Setting up for server/headless environment..."
+fi
+
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                       Dependencies                       │
 #          ╰──────────────────────────────────────────────────────────╯
-# Common packages
-declare -a COMMON_PACKAGES=("stow" "zsh" "tmux" "git" "neovim" "nsxiv" "alacritty" "ripgrep" "fzf" "lazygit" "gcc" "nodejs" "npm" "uv" "eza" "i3status-rust" "xdg-desktop-portal-gnome")
 
-# Distro-specific packages 
-declare -a ARCH_PACKAGES=("${COMMON_PACKAGES[@]}" "fd")
-declare -a DEBIAN_PACKAGES=("${COMMON_PACKAGES[@]}" "fd-find")
-declare -a FEDORA_PACKAGES=("${COMMON_PACKAGES[@]}" "fd-find")
+# Core packages (always installed)
+declare -a CORE_PACKAGES=("stow" "zsh" "tmux" "git" "neovim" "ripgrep" "fzf" "gcc" "nodejs" "npm")
+declare -a CORE_PACKAGES_ARCH=("fd" "lazygit" "eza" "uv")
+declare -a CORE_PACKAGES_DEBIAN=("fd-find")
+declare -a CORE_PACKAGES_FEDORA=("fd-find" "lazygit" "eza" "uv")
+
+# Desktop-only packages
+declare -a DESKTOP_PACKAGES=("nsxiv" "alacritty" "i3status-rust" "xdg-desktop-portal-gnome")
 
 # ── Detect and install ────────────────────────────────────────────────
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+#          ╭──────────────────────────────────────────────────────────╮
+#          │                          DEBIAN                          │
+#          ╰──────────────────────────────────────────────────────────╯
     if command -v apt &> /dev/null; then
+        echo "Detected Debian/Ubuntu-based system"
         sudo apt update
-        sudo apt install -y "${DEBIAN_PACKAGES[@]}"
+        
+        # Install core packages
+        sudo apt install -y "${CORE_PACKAGES[@]}" "${CORE_PACKAGES_DEBIAN[@]}"
+        
+        # Install desktop packages if needed
+        if [ "$IS_DESKTOP" = true ]; then
+            echo "Installing desktop packages..."
+            for pkg in "${DESKTOP_PACKAGES[@]}"; do
+                if apt-cache show "$pkg" &> /dev/null; then
+                    sudo apt install -y "$pkg" || echo "Warning: Failed to install $pkg"
+                else
+                    echo "Package $pkg not available, skipping..."
+                fi
+            done
+        fi
+        
+        # ── Install lazygit from binary (not in standard Debian repos) ────────
+        if ! command -v lazygit &> /dev/null; then
+            echo "Installing lazygit from binary..."
+            LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
+            curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+            tar xf lazygit.tar.gz lazygit
+            sudo install lazygit -D -t /usr/local/bin/
+            rm lazygit.tar.gz
+        fi
+        # ── Install eza from binary (not in standard Debian repos) ────────────
+        if ! command -v eza &> /dev/null; then
+            echo "Installing eza from binary..."
+            apt install -y cargo
+            git clone https://github.com/eza-community/eza.git
+            cd eza
+            cargo install --path .
+            cd ..
+            rm -rf eza
+        fi
+        # ── Install uv from binary (not in standard Debian repos) ─────────────
+        if ! command -v uv &> /dev/null; then
+            echo "Installing uv from binary..."
+            curl -LsSf https://astral.sh/uv/install.sh | sh
+        fi
+        
+        
+#          ╭──────────────────────────────────────────────────────────╮
+#          │                           ARCH                           │
+#          ╰──────────────────────────────────────────────────────────╯
     elif command -v pacman &> /dev/null; then
-        sudo pacman -Sy --noconfirm "${ARCH_PACKAGES[@]}"
+        echo "Detected Arch-based system"
+        PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_ARCH[@]}")
+        if [ "$IS_DESKTOP" = true ]; then
+            PACKAGES+=("${DESKTOP_PACKAGES[@]}")
+        fi
+        sudo pacman -Sy --noconfirm "${PACKAGES[@]}"
+
+#          ╭──────────────────────────────────────────────────────────╮
+#          │                          FEDORA                          │
+#          ╰──────────────────────────────────────────────────────────╯
     elif command -v dnf &> /dev/null; then
-        sudo dnf install -y "${FEDORA_PACKAGES[@]}"
+        echo "Detected Fedora-based system"
+        PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_FEDORA[@]}")
+        if [ "$IS_DESKTOP" = true ]; then
+            PACKAGES+=("${DESKTOP_PACKAGES[@]}")
+        fi
+        sudo dnf install -y "${PACKAGES[@]}"
+        
     else
         echo "Unsupported package manager. Please install manually."
         exit 1
@@ -36,7 +112,7 @@ fi
 # ── install oh-my-zsh ─────────────────────────────────────────────────
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     echo "Installing oh-my-zsh..."
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended   
     echo "Oh-my-zsh installed."
 else
     echo "Oh-my-zsh already installed, skipping install."
@@ -66,36 +142,42 @@ fi
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                        Nerd Fonts                        │
 #          ╰──────────────────────────────────────────────────────────╯
-declare -a NERD_FONTS=("GeistMono")
-mkdir -p ~/.local/share/fonts
 
-# ── Download and install each font ────────────────────────────────────
-for font in "${NERD_FONTS[@]}"; do
-    if ! ls "$HOME/.local/share/fonts/${font}NerdFont"*.otf 1> /dev/null 2>&1; then
-        echo "Downloading $font Nerd Font..."
-        
-        # Define zip file path
-        zip_file="$font.zip"
-        zip_path="$HOME/.local/share/fonts/$zip_file"
-        
-        # Download the font
-        curl -L "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/$zip_file" -o "$zip_path"
-        
-        # Unzip into the fonts directory
-        unzip -o "$zip_path" -d "$HOME/.local/share/fonts"
-        
-        # Remove the zip file
-        rm "$zip_path"
-    else
-        echo "$font Nerd Font already installed."
-    fi
-done
+if [ "$IS_DESKTOP" = true ]; then
+    declare -a NERD_FONTS=("GeistMono")
+    mkdir -p ~/.local/share/fonts
 
-# ── Refresh font cache ────────────────────────────────────────────────
-fc-cache -fv
+    # ── Download and install each font ────────────────────────────────────
+    for font in "${NERD_FONTS[@]}"; do
+        if ! ls "$HOME/.local/share/fonts/${font}NerdFont"*.otf 1> /dev/null 2>&1; then
+            echo "Downloading $font Nerd Font..."
+            
+            # Define zip file path
+            zip_file="$font.zip"
+            zip_path="$HOME/.local/share/fonts/$zip_file"
+            
+            # Download the font
+            curl -L "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/$zip_file" -o "$zip_path"
+            
+            # Unzip into the fonts directory
+            unzip -o "$zip_path" -d "$HOME/.local/share/fonts"
+            
+            # Remove the zip file
+            rm "$zip_path"
+        else
+            echo "$font Nerd Font already installed."
+        fi
+    done
 
-echo "Nerd fonts installed and font cache updated."
+    # ── Refresh font cache ────────────────────────────────────────────────
+    fc-cache -fv
 
+    echo "Nerd fonts installed and font cache updated."
+else
+    echo "Skipping Nerd Fonts installation (server mode)."
+fi
+
+source "$HOME/.bashrc"
+source "$HOME/.zshrc"
 echo "=== Setup complete! ==="
-echo "Please restart your shell or run 'source ~/.bashrc' or 'source ~/.zshrc'".
 
