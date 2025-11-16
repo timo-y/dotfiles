@@ -8,7 +8,7 @@ echo "=== Dotfiles + Dependencies Setup Script ==="
 #          │                       Dependencies                       │
 #          ╰──────────────────────────────────────────────────────────╯
 # Common packages
-declare -a COMMON_PACKAGES=("stow" "zsh" "tmux" "git" "neovim" "alacritty" "ripgrep" "fzf" "lazygit" "gcc" "nodejs" "feh" "i3status-rust" "npm" "uv")
+declare -a COMMON_PACKAGES=("stow" "zsh" "tmux" "git" "neovim" "nsxiv" "alacritty" "ripgrep" "fzf" "lazygit" "gcc" "nodejs" "npm" "uv" "eza" "i3status-rust" "xdg-desktop-portal-gnome")
 
 # Distro-specific packages 
 declare -a ARCH_PACKAGES=("${COMMON_PACKAGES[@]}" "fd")
