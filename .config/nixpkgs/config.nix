@@ -8,8 +8,7 @@
         tmux
         oh-my-zsh
         neovim
-        nodejs_22 
-        npm
+        nodejs 
         eza # ls alias
         gcc
         fd # find
