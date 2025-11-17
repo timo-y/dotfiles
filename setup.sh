@@ -91,7 +91,7 @@ fi
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                           Nix                            │
 #          ╰──────────────────────────────────────────────────────────╯
-ech "[Step 3/3] Installing Nix and Nix packages..."
+echo "[Step 3/3] Installing Nix and Nix packages..."
 if ! command -v nix-env &> /dev/null; then
     echo "Nix is not installed. Installing Nix..."
     
