@@ -22,7 +22,10 @@ fi
 #   Packages, that are installed by the native               █
 #   package manager because they need hardware access        █
 #                                                            ▼
-declare -a CORE_PACKAGES=("git" "stow" "xz")
+declare -a CORE_PACKAGES=("git" "stow")
+declare -a CORE_PACKAGES_ARCH=("xz")
+declare -a CORE_PACKAGES_DEBIAN=("xz-utils")
+declare -a CORE_PACKAGES_FEDORA=("xz")
 declare -a DESKTOP_PACKAGES=("alacritty")
 
 echo "[Step 1/3] Installing packages via native package manager..."
@@ -31,7 +34,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # ── DEBIAN ────────────────────────────────────────────────────────────
     if command -v apt &> /dev/null; then
         echo "Detected Debian/Ubuntu-based system"
-        PACKAGES=("${CORE_PACKAGES[@]}")
+        PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_DEBIAN[@]}")
         sudo apt update
         if [ "$IS_DESKTOP" = true ]; then
             PACKAGES+=("${DESKTOP_PACKAGES[@]}")
@@ -41,7 +44,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # ── ARCH ──────────────────────────────────────────────────────────────
     elif command -v pacman &> /dev/null; then
         echo "Detected Arch-based system"
-        PACKAGES=("${CORE_PACKAGES[@]}")
+        PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_ARCH[@]}")
         if [ "$IS_DESKTOP" = true ]; then
             PACKAGES+=("${DESKTOP_PACKAGES[@]}")
         fi
@@ -50,7 +53,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # ── FEDORA ────────────────────────────────────────────────────────────
     elif command -v dnf &> /dev/null; then
         echo "Detected Fedora-based system"
-        PACKAGES=("${CORE_PACKAGES[@]}")
+        PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_FEDORA[@]}")
         if [ "$IS_DESKTOP" = true ]; then
             PACKAGES+=("${DESKTOP_PACKAGES[@]}")
         fi
