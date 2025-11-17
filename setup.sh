@@ -22,7 +22,7 @@ fi
 #   Packages, that are installed by the native               █
 #   package manager because they need hardware access        █
 #                                                            ▼
-declare -a CORE_PACKAGES=("git" "stow")
+declare -a CORE_PACKAGES=("git" "stow" "xz")
 declare -a DESKTOP_PACKAGES=("alacritty")
 
 echo "[Step 1/3] Installing packages via native package manager..."
