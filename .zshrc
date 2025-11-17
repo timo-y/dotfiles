@@ -126,8 +126,6 @@ alias la='eza -a --color=always --group-directories-first'
 alias lt='eza -aT -L 2 --color=always --group-directories-first'
 alias l.='eza -a | grep -E "^\."'
 
-. "$HOME/.local/bin/env"
-
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                        SSH AGENT                         │
 #          ╰──────────────────────────────────────────────────────────╯
