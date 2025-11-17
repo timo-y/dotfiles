@@ -19,52 +19,84 @@ fi
 #          │                       Dependencies                       │
 #          ╰──────────────────────────────────────────────────────────╯
 #                                                            ▲
-#   Desktop-only packages, that are installed by the native  █
+#   Packages, that are installed by the native               █
 #   package manager because they need hardware access        █
 #                                                            ▼
+declare -a CORE_PACKAGES=("git" "stow")
 declare -a DESKTOP_PACKAGES=("alacritty")
 
-if [ "$IS_DESKTOP" = true ]; then
-    echo "Installing desktop packages..."
-    # ── Detect and install ────────────────────────────────────────────────
-    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        #          ╭──────────────────────────────────────────────────────────╮
-        #          │                          DEBIAN                          │
-        #          ╰──────────────────────────────────────────────────────────╯
-        if command -v apt &> /dev/null; then
-            echo "Detected Debian/Ubuntu-based system"
-            sudo apt update
-            sudo api install -y "${DESKTOP_PACKAGES[@]}"
-            
-        #          ╭──────────────────────────────────────────────────────────╮
-        #          │                           ARCH                           │
-        #          ╰──────────────────────────────────────────────────────────╯
-        elif command -v pacman &> /dev/null; then
-            echo "Detected Arch-based system"
-            sudo pacman -Sy --noconfirm "${DESKTOP_PACKAGES[@]}"
-
-        #          ╭──────────────────────────────────────────────────────────╮
-        #          │                          FEDORA                          │
-        #          ╰──────────────────────────────────────────────────────────╯
-        elif command -v dnf &> /dev/null; then
-            echo "Detected Fedora-based system"
-            sudo dnf install -y "${DESKTOP_PACKAGES[@]}"
-        else
-            echo "Unsupported package manager. Please install manually."
-            exit 1
+echo "[Step 1/3] Installing packages via native package manager..."
+# ── Detect and install ────────────────────────────────────────────────
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # ── DEBIAN ────────────────────────────────────────────────────────────
+    if command -v apt &> /dev/null; then
+        echo "Detected Debian/Ubuntu-based system"
+        PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_DEBIAN[@]}")
+        sudo apt update
+        if [ "$IS_DESKTOP" = true ]; then
+            PACKAGES+=("${DESKTOP_PACKAGES[@]}")
         fi
-    else 
-        echo "Non-Linux OS I can't help you..."
+        sudo apt install -y "${PACKAGES[@]}"
+
+    # ── ARCH ──────────────────────────────────────────────────────────────
+    elif command -v pacman &> /dev/null; then
+        echo "Detected Arch-based system"
+        PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_ARCH[@]}")
+        if [ "$IS_DESKTOP" = true ]; then
+            PACKAGES+=("${DESKTOP_PACKAGES[@]}")
+        if
+        sudo pacman -Sy --noconfirm "${PACKAGES[@]}"
+
+    # ── FEDORA ────────────────────────────────────────────────────────────
+    elif command -v dnf &> /dev/null; then
+        echo "Detected Fedora-based system"
+        PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_FEDORA[@]}")
+        if [ "$IS_DESKTOP" = true ]; then
+            PACKAGES+=("${DESKTOP_PACKAGES[@]}")
+        fi
+        sudo dnf install -y "${PACKAGES[@]}"
+
+    else
+        echo "Unsupported package manager. Please install manually."
         exit 1
     fi
-    echo "All packages installed."
-else
-    echo "Skipping desktop packages installation with native package manager (server mode)."
+else 
+    echo "Non-Linux OS I can't help you..."
+    exit 1
 fi
+
+#          ╭──────────────────────────────────────────────────────────╮
+#          │                          Config                          │
+#          ╰──────────────────────────────────────────────────────────╯
+echo "[Step 2/3] Setting up dotfiles..."
+
+# ── Set up XDG_CONFIG_HOME ────────────────────────────────────────────
+export XDG_CONFIG_HOME="$HOME"/.config
+mkdir -p "$XDG_CONFIG_HOME"
+
+# ── dotfiles ──────────────────────────────────────────────────────────
+echo "Running GNU Stow to create symlinks..."
+stow -v --adopt .
+echo "Dotfiles installed."
+
+# ── nvim ──────────────────────────────────────────────────────────────
+if [ ! -d "$XDG_CONFIG_HOME/nvim" ]; then
+    echo "Cloning nvim config from repo..."
+    git clone https://github.com/timo-y/nvim.git "$XDG_CONFIG_HOME"/nvim
+    echo "Nvim config cloned."
+else
+    echo "Nvim config already exists, skipping clone."
+fi
+
+echo "Sourcing bash and zsh config..."
+source "$HOME/.bashrc"
+source "$HOME/.zshrc"
+echo "Config sourced."
 
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                           Nix                            │
 #          ╰──────────────────────────────────────────────────────────╯
+ech "[Step 3/3] Installing Nix and Nix packages..."
 if ! command -v nix-env &> /dev/null; then
     echo "Nix is not installed. Installing Nix..."
     
@@ -102,28 +134,5 @@ else
 fi
 echo "All packages installed."
 
-#          ╭──────────────────────────────────────────────────────────╮
-#          │                          Config                          │
-#          ╰──────────────────────────────────────────────────────────╯
-
-# ── Set up XDG_CONFIG_HOME ────────────────────────────────────────────
-export XDG_CONFIG_HOME="$HOME"/.config
-mkdir -p "$XDG_CONFIG_HOME"
-
-# ── dotfiles ──────────────────────────────────────────────────────────
-echo "Running GNU Stow to create symlinks..."
-stow -v --adopt .
-
-# ── nvim ──────────────────────────────────────────────────────────────
-if [ ! -d "$XDG_CONFIG_HOME/nvim" ]; then
-    echo "Cloning nvim config from repo..."
-    git clone https://github.com/timo-y/nvim.git "$XDG_CONFIG_HOME"/nvim
-    echo "Nvim config cloned."
-else
-    echo "Nvim config already exists, skipping clone."
-fi
-
-source "$HOME/.bashrc"
-source "$HOME/.zshrc"
 echo "=== Setup complete! ==="
 
