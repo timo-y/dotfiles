@@ -88,11 +88,6 @@ else
     echo "Nvim config already exists, skipping clone."
 fi
 
-echo "Sourcing bash and zsh config..."
-source "$HOME/.bashrc"
-source "$HOME/.zshrc"
-echo "Config sourced."
-
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                           Nix                            │
 #          ╰──────────────────────────────────────────────────────────╯
@@ -135,4 +130,6 @@ fi
 echo "All packages installed."
 
 echo "=== Setup complete! ==="
+# ecoh something that sourcing needs to be done
+echo "You need to run 'source ~/.bashrc' and 'source ~/.zshrc' or restart your shell for the changes to take effect."
 
