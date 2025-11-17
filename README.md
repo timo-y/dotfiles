@@ -14,7 +14,7 @@ The script will:
 - Install GeistMono Nerd Font
 
 #### Installed Packages
-Core: `stow` `zsh` `tmux` `git` `neovim` `nsxiv` `alacritty` `ripgrep` `fzf` `lazygit` `gcc` `nodejs` `npm` `uv` `eza` `i3status-rust` `xdg-desktop-portal-gnome`
+Core: "stow" "zsh" "tmux" "git" "neovim" "nsxiv" "alacritty" "ripgrep" "fzf" "lazygit" "gcc" "nodejs" "npm" "uv" "eza" "i3status-rust" "xdg-desktop-portal-gnome"
 Distro-specific: `fd` (Arch) or `fd-find` (Debian/Fedora)
 
 #### Usage
@@ -34,6 +34,13 @@ On the local machine:
 - [devpod](https://devpod.sh/)
 
 need to be installed.
+
+Additionally the projects `.devcontainer.json` needs to contain the following part in order to add _nix_ as a feature:
+```json
+"features": {
+         "ghcr.io/devcontainers/features/nix:1": {}
+     },
+```
 
 #### Usage
 In the console `cd` into your project-dir (containing the `.devcontainer`-dir or the `.devcontainer.json`) and run:
