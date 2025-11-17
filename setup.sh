@@ -31,7 +31,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # ── DEBIAN ────────────────────────────────────────────────────────────
     if command -v apt &> /dev/null; then
         echo "Detected Debian/Ubuntu-based system"
-        PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_DEBIAN[@]}")
+        PACKAGES=("${CORE_PACKAGES[@]}")
         sudo apt update
         if [ "$IS_DESKTOP" = true ]; then
             PACKAGES+=("${DESKTOP_PACKAGES[@]}")
@@ -41,16 +41,16 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # ── ARCH ──────────────────────────────────────────────────────────────
     elif command -v pacman &> /dev/null; then
         echo "Detected Arch-based system"
-        PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_ARCH[@]}")
+        PACKAGES=("${CORE_PACKAGES[@]}")
         if [ "$IS_DESKTOP" = true ]; then
             PACKAGES+=("${DESKTOP_PACKAGES[@]}")
-        if
+        fi
         sudo pacman -Sy --noconfirm "${PACKAGES[@]}"
 
     # ── FEDORA ────────────────────────────────────────────────────────────
     elif command -v dnf &> /dev/null; then
         echo "Detected Fedora-based system"
-        PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_FEDORA[@]}")
+        PACKAGES=("${CORE_PACKAGES[@]}")
         if [ "$IS_DESKTOP" = true ]; then
             PACKAGES+=("${DESKTOP_PACKAGES[@]}")
         fi
