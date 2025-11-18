@@ -133,9 +133,13 @@ fi
 #
 # ── Clean up nix-build-user-* users ───────────────────────────────────
 echo "Cleaning up nix-build-user-* users..."
-getent passwd | grep 'nix-build-user' | cut -d: -f1 | while read -r user; do
+for user in $(getent passwd | grep '^nixbld' | cut -d: -f1); do
+    echo "Deleting user: $user"
     sudo userdel "$user"
 done
+
+echo "All nixbld users have been deleted."
+
 
 echo "All packages installed."
 
