@@ -130,6 +130,13 @@ if [ "$IS_DESKTOP" = true ]; then
 else
     echo "Skipping desktop packages installation (server mode)."
 fi
+#
+# ── Clean up nix-build-user-* users ───────────────────────────────────
+echo "Cleaning up nix-build-user-* users..."
+getent passwd | grep 'nix-build-user' | cut -d: -f1 | while read -r user; do
+    sudo userdel "$user"
+done
+
 echo "All packages installed."
 
 echo "=== Setup complete! ==="
