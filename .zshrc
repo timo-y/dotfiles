@@ -1,5 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+export XDG_CONFIG_HOME="$HOME/.config"
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -106,7 +107,7 @@ source $ZSH/oh-my-zsh.sh
 # History in cache directory
 # History
 HISTSIZE=5000
-HISTFILE=~/.cache/zsh/history
+HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
 HISTDUP=erase
 setopt appendhistory
