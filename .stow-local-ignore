@@ -25,4 +25,5 @@ _darcs
 ^/LICENSE.*
 ^/COPYING
 
-\.sh
+setup.sh
+install_zsh_plugins.sh
