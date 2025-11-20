@@ -1,7 +1,7 @@
 {
   packageOverrides = pkgs: with pkgs; {
-    corePackages = pkgs.buildEnv {
-      name = "core-tools";
+    timosCorePackages = pkgs.buildEnv {
+      name = "timos-core-tools";
       paths = [
         stow
         zsh
@@ -18,8 +18,8 @@
         lazygit # git gui
       ];
     };
-    desktopPackages = pkgs.buildEnv {
-      name = "desktop-tools";
+    timosDesktopPackages = pkgs.buildEnv {
+      name = "timos-desktop-tools";
       paths = [
         nsxiv
         i3status-rust

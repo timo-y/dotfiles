@@ -15,6 +15,8 @@ else
     echo "Setting up for server/headless environment..."
 fi
 
+TOTAL_STEPS=4
+I=0
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                       Dependencies                       │
 #          ╰──────────────────────────────────────────────────────────╯
@@ -28,7 +30,8 @@ declare -a CORE_PACKAGES_DEBIAN=("xz-utils")
 declare -a CORE_PACKAGES_FEDORA=("xz")
 declare -a DESKTOP_PACKAGES=("alacritty")
 
-echo "[Step 1/3] Installing packages via native package manager..."
+((I=I+1))
+echo "[Step $I/$TOTAL_STEPS] Installing packages via native package manager..."
 # ── Detect and install ────────────────────────────────────────────────
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # ── DEBIAN ────────────────────────────────────────────────────────────
@@ -36,7 +39,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         echo "Detected Debian/Ubuntu-based system"
         PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_DEBIAN[@]}")
         sudo apt update
-        if [ "$IS_DESKTOP" = true ]; then
+        if $IS_DESKTOP; then
             PACKAGES+=("${DESKTOP_PACKAGES[@]}")
         fi
         sudo apt install -y "${PACKAGES[@]}"
@@ -45,7 +48,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     elif command -v pacman &> /dev/null; then
         echo "Detected Arch-based system"
         PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_ARCH[@]}")
-        if [ "$IS_DESKTOP" = true ]; then
+        if $IS_DESKTOP; then
             PACKAGES+=("${DESKTOP_PACKAGES[@]}")
         fi
         sudo pacman -Sy --noconfirm "${PACKAGES[@]}"
@@ -54,7 +57,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     elif command -v dnf &> /dev/null; then
         echo "Detected Fedora-based system"
         PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_FEDORA[@]}")
-        if [ "$IS_DESKTOP" = true ]; then
+        if $IS_DESKTOP; then
             PACKAGES+=("${DESKTOP_PACKAGES[@]}")
         fi
         sudo dnf install -y "${PACKAGES[@]}"
@@ -71,7 +74,8 @@ fi
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                          Config                          │
 #          ╰──────────────────────────────────────────────────────────╯
-echo "[Step 2/3] Setting up dotfiles..."
+((I=I+1))
+echo "[Step $I/$TOTAL_STEPS] Setting up dotfiles..."
 
 # ── Set up XDG_CONFIG_HOME ────────────────────────────────────────────
 export XDG_CONFIG_HOME="$HOME"/.config
@@ -94,12 +98,13 @@ fi
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                           Nix                            │
 #          ╰──────────────────────────────────────────────────────────╯
-echo "[Step 3/3] Installing Nix and Nix packages..."
+((I=I+1))
+echo "[Step $I/$TOTAL_STEPS] Installing Nix and Nix packages..."
 if ! command -v nix-env &> /dev/null; then
     echo "Nix is not installed. Installing Nix..."
     
     # ── Install Nix (works on Linux and macOS) ────────────────────────────
-    if curl -L https://nixos.org/nix/install | sh -s -- --daemon; then
+    if curl -L https://nixos.org/nix/install | sh -s -- --no-daemon; then
         echo "Nix installed successfully."
         
         # ── Source nix for the current shell session ──────────────────────────
@@ -121,11 +126,11 @@ nix-channel --update
 
 # Install the packages defined in config.nix (now stowed to ~/.config/nixpkgs/config.nix)
 echo "Installing core packages..."
-nix-env -iA nixpkgs.corePackages
+nix-env -iA nixpkgs.timosCorePackages
 echo "Core packages installed."
-if [ "$IS_DESKTOP" = true ]; then
+if $IS_DESKTOP; then
     echo "Installing desktop packages..."
-    nix-env -iA nixpkgs.desktopPackages
+    nix-env -iA nixpkgs.timosDesktopPackages
     echo "Desktop packages installed."
 else
     echo "Skipping desktop packages installation (server mode)."
@@ -140,10 +145,16 @@ done
 
 echo "All nixbld users have been deleted."
 
+#          ╭──────────────────────────────────────────────────────────╮
+#          │        Post-Dependency-Installation Configuration        │
+#          ╰──────────────────────────────────────────────────────────╯
+((I=I+1))
+echo "[Step $I/$TOTAL_STEPS] Installing zsh plugins..."
+# ── Install zsh plugins ───────────────────────────────────────────────
+sh ./install_zsh_plugins.sh
 
 echo "All packages installed."
 
 echo "=== Setup complete! ==="
-# ecoh something that sourcing needs to be done
 echo "You need to run 'source ~/.bashrc' and 'source ~/.zshrc' or restart your shell for the changes to take effect."
 
