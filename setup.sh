@@ -135,22 +135,6 @@ if $IS_DESKTOP; then
 else
     echo "Skipping desktop packages installation (server mode)."
 fi
-#
-# ── Clean up nix-build-user-* users ───────────────────────────────────
-echo "Found $(getent passwd | grep '^nixbld' | wc -l) nixbld users."
-read -p "Do you want to clean up nix-build-user-* users? (y/n): " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo "Cleaning up nix-build-user-* users..."
-    for user in $(getent passwd | grep '^nixbld' | cut -d: -f1); do
-        echo "Deleting user: $user"
-        sudo userdel "$user"
-    done
-else
-    echo "Skipping nix-build-user-* users cleanup."
-fi
-
-echo "All nixbld users have been deleted."
 
 #          ╭──────────────────────────────────────────────────────────╮
 #          │        Post-Dependency-Installation Configuration        │
