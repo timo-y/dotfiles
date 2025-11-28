@@ -16,7 +16,6 @@
         fzf # fuzzy finder
         git
         lazygit # git gui
-        nerd-fonts.geist-mono
       ];
     };
     timosDesktopPackages = pkgs.buildEnv {
@@ -27,6 +26,7 @@
         xdg-desktop-portal-gnome
         kitty
         waybar
+        nerd-fonts.geist-mono
       ];
     };
   };
