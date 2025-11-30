@@ -294,6 +294,7 @@ exec --no-startup-id sleep 4 && i3-msg 'workspace 2; exec alacritty -e nvim .'
 exec --no-startup-id sleep 4 && exec 'brave'
 exec --no-startup-id sleep 4 && exec 'thunderbird'
 exec --no-startup-id sleep 4 && exec 'discord'
+exec --no-startup-id sleep 4 && exec 'caffeine'
 
 # Return to workspace 3 after startup
 exec --no-startup-id i3-msg 'workspace 3'
