@@ -24,7 +24,7 @@ I=0
 #   Packages, that are installed by the native               █
 #   package manager because they need hardware access        █
 #                                                            ▼
-declare -a CORE_PACKAGES=("git" "stow")
+declare -a CORE_PACKAGES=("git" "stow", "zsh")
 declare -a CORE_PACKAGES_ARCH=("xz")
 declare -a CORE_PACKAGES_DEBIAN=("xz-utils")
 declare -a CORE_PACKAGES_FEDORA=("xz")

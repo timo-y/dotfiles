@@ -4,7 +4,6 @@
       name = "timos-core-tools";
       paths = [
         stow
-        zsh
         tmux
         oh-my-zsh
         neovim
