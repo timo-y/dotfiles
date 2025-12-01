@@ -24,7 +24,7 @@ I=0
 #   Packages, that are installed by the native               █
 #   package manager because they need hardware access        █
 #                                                            ▼
-declare -a CORE_PACKAGES=("git" "stow", "zsh")
+declare -a CORE_PACKAGES=("git" "stow" "zsh")
 declare -a CORE_PACKAGES_ARCH=("xz")
 declare -a CORE_PACKAGES_DEBIAN=("xz-utils")
 declare -a CORE_PACKAGES_FEDORA=("xz")
@@ -106,11 +106,9 @@ if ! command -v nix-env &> /dev/null; then
     # ── Install Nix (works on Linux and macOS) ────────────────────────────
     if curl -L https://nixos.org/nix/install | sh -s -- --no-daemon; then
         echo "Nix installed successfully."
-        
+
         # ── Source nix for the current shell session ──────────────────────────
-        if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-            . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-        fi
+    	. "$HOME/.nix-profile/etc/profile.d/nix.sh"
     else
         echo "Failed to install Nix. Please install manually from https://nixos.org/download.html"
         exit 1
@@ -140,12 +138,23 @@ fi
 #          │        Post-Dependency-Installation Configuration        │
 #          ╰──────────────────────────────────────────────────────────╯
 ((I=I+1))
-echo "[Step $I/$TOTAL_STEPS] Installing zsh plugins..."
+echo "[Step $I/$TOTAL_STEPS] Installing zsh and plugins..."
+# Install oh-my-zsh
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "oh-my-zsh is not installed. Installing oh-my-zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    echo "oh-my-zsh installed successfully."
+else
+    echo "oh-my-zsh is already installed."
+fi
 # ── Install zsh plugins ───────────────────────────────────────────────
 sh ./install_zsh_plugins.sh
 
 echo "All packages installed."
 
 echo "=== Setup complete! ==="
+. ~/.bashrc
+. ~/.zshrc
 echo "You need to run 'source ~/.bashrc' and 'source ~/.zshrc' or restart your shell for the changes to take effect."
+
 
