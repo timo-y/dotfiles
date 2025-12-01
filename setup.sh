@@ -153,8 +153,4 @@ sh ./install_zsh_plugins.sh
 echo "All packages installed."
 
 echo "=== Setup complete! ==="
-. ~/.bashrc
-. ~/.zshrc
 echo "You need to run 'source ~/.bashrc' and 'source ~/.zshrc' or restart your shell for the changes to take effect."
-
-
