@@ -4,14 +4,46 @@ set -e  # Exit on error
 
 echo "=== Dotfiles + Dependencies Setup Script ==="
 
-# ── Ask installation type ─────────────────────────────────────────────
-read -p "Is this a desktop installation? (y/n): " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    IS_DESKTOP=true
+# ── Parse command line arguments ──────────────────────────────────────
+IS_DESKTOP=false
+MODE_SPECIFIED=false
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --server-install)
+            IS_DESKTOP=false
+            MODE_SPECIFIED=true
+            echo "Server/headless installation mode selected."
+            shift
+            ;;
+        --desktop-install)
+            IS_DESKTOP=true
+            MODE_SPECIFIED=true
+            echo "Desktop installation mode selected."
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Usage: $0 [--server-install|--desktop-install]"
+            exit 1
+            ;;
+    esac
+done
+
+# ── Ask installation type if not specified ───────────────────────────
+if [[ "$MODE_SPECIFIED" == false ]]; then
+    read -p "Is this a desktop installation? (y/n): " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        IS_DESKTOP=true
+        echo "Setting up for desktop environment..."
+    else
+        IS_DESKTOP=false
+        echo "Setting up for server/headless environment..."
+    fi
+elif [[ "$IS_DESKTOP" == true ]]; then
     echo "Setting up for desktop environment..."
 else
-    IS_DESKTOP=false
     echo "Setting up for server/headless environment..."
 fi
 
