@@ -15,6 +15,7 @@ ZSH_THEME="bira"
 setopt AUTO_LIST
 setopt AUTO_MENU
 setopt COMPLETE_IN_WORD
+zstyle ':completion:*' hosts off
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # Case insensitive completion
 
@@ -139,7 +140,7 @@ if command -v eza &> /dev/null; then
 fi
 
 ## zsh-autosuggestions
-bindkey '^I^I' autosuggest-accept
+bindkey '^ ' autosuggest-accept
 
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                        SSH AGENT                         │
@@ -167,4 +168,4 @@ else
     start_agent
 fi
 
-if [ -e /home/timo/.nix-profile/etc/profile.d/nix.sh ]; then . /home/timo/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
