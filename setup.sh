@@ -2,6 +2,15 @@
 
 set -e  # Exit on error
 
+# ── Detect if we need sudo ───────────────────────────────────────────
+if [ "$EUID" -eq 0 ] || [ ! -x "$(command -v sudo)" ]; then
+    SUDO=""
+    echo "Running as root or sudo not available - commands will run directly"
+else
+    SUDO="sudo"
+    echo "Running with sudo privileges"
+fi
+
 echo "=== Dotfiles + Dependencies Setup Script ==="
 
 # ── Parse command line arguments ──────────────────────────────────────
@@ -70,11 +79,11 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     if command -v apt &> /dev/null; then
         echo "Detected Debian/Ubuntu-based system"
         PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_DEBIAN[@]}")
-        sudo apt update
+        $SUDO apt update
         if $IS_DESKTOP; then
             PACKAGES+=("${DESKTOP_PACKAGES[@]}")
         fi
-        sudo apt install -y "${PACKAGES[@]}"
+        $SUDO apt install -y "${PACKAGES[@]}"
 
     # ── ARCH ──────────────────────────────────────────────────────────────
     elif command -v pacman &> /dev/null; then
@@ -83,7 +92,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         if $IS_DESKTOP; then
             PACKAGES+=("${DESKTOP_PACKAGES[@]}")
         fi
-        sudo pacman -Sy --noconfirm "${PACKAGES[@]}"
+        $SUDO pacman -Sy --noconfirm "${PACKAGES[@]}"
 
     # ── FEDORA ────────────────────────────────────────────────────────────
     elif command -v dnf &> /dev/null; then
@@ -92,7 +101,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         if $IS_DESKTOP; then
             PACKAGES+=("${DESKTOP_PACKAGES[@]}")
         fi
-        sudo dnf install -y "${PACKAGES[@]}"
+        $SUDO dnf install -y "${PACKAGES[@]}"
 
     else
         echo "Unsupported package manager. Please install manually."
