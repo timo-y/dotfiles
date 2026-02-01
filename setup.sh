@@ -144,13 +144,6 @@ echo "[Step $I/$TOTAL_STEPS] Installing Nix and Nix packages..."
 if ! command -v nix-env &> /dev/null; then
     echo "Nix is not installed. Installing Nix..."
     
-    # ── Pre-create /nix directory if running as root ──────────────────────
-    if [ "$EUID" -eq 0 ] && [ ! -d "/nix" ]; then
-        echo "Creating /nix directory (running as root)..."
-        mkdir -m 0755 /nix
-        chown root /nix
-    fi
-    
     # ── Install Nix (works on Linux and macOS) ────────────────────────────
     if curl -L https://nixos.org/nix/install | sh -s -- --no-daemon; then
         echo "Nix installed successfully."
