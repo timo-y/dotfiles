@@ -193,7 +193,7 @@ assign [class="(?i)discord"] $ws4
 #assign [class="(?i)upnote"] $ws5
 assign [class="(?i)(mail|thunderbird)"] $ws5
 assign [class="(?i)heroic"] $ws6
-assign [class="(?i)steam"] $ws7
+assign [class="(?i)steam"] $ws6
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
