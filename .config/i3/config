@@ -128,16 +128,9 @@ set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
 
-# Assign workspaces to specific outputs (displays)
-workspace $ws1 output HDMI-0
-workspace $ws2 output HDMI-0
-workspace $ws3 output HDMI-0
-workspace $ws4 output HDMI-0
-workspace $ws5 output HDMI-0
-workspace $ws6 output HDMI-0
-workspace $ws7 output HDMI-0
-workspace $ws8 output HDMI-0
-workspace $ws9 output HDMI-0
+# Host-specific display/workspace-output config lives in hosts/<name>/.config/i3/host.d/
+# Empty glob (laptop without overlay) is a no-op — i3 silently skips missing matches.
+include ~/.config/i3/host.d/*.conf
 
 # switch to workspace
 bindsym $mod+1 workspace number $ws1

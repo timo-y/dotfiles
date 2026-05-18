@@ -1,0 +1,41 @@
+# Yazi config — preview deps installed via .config/nixpkgs/config.nix:
+#   pdf:   poppler_utils  (pdftoppm)
+#   video: ffmpegthumbnailer
+#   image: built-in (kitty/iterm protocol) + imagemagick + chafa fallback
+#   archive: 7zz (_7zz)
+#   json:  jq
+# Anything not overridden here falls back to yazi's built-in defaults.
+
+[mgr]
+ratio          = [1, 4, 3]
+sort_by        = "natural"
+sort_sensitive = false
+sort_reverse   = false
+sort_dir_first = true
+show_hidden    = false
+show_symlink   = true
+
+[preview]
+wrap        = "no"
+tab_size    = 2
+max_width   = 1000
+max_height  = 1000
+cache_dir   = ""
+image_delay = 30
+image_filter = "triangle"
+image_quality = 75
+ueberzug_scale = 1
+ueberzug_offset = [0, 0, 0, 0]
+
+[opener]
+edit = [
+  { run = '${EDITOR:-nvim} "$@"', desc = "Edit", block = true, for = "unix" },
+]
+open = [
+  { run = 'xdg-open "$1"',        desc = "Open", for = "linux" },
+]
+
+[open]
+prepend_rules = [
+  { name = "*.pdf", use = "open" },
+]

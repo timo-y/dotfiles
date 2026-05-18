@@ -16,6 +16,7 @@ echo "=== Dotfiles + Dependencies Setup Script ==="
 # ── Parse command line arguments ──────────────────────────────────────
 IS_DESKTOP=false
 MODE_SPECIFIED=false
+HOST_NAME="$(hostname)"
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -31,15 +32,33 @@ while [[ $# -gt 0 ]]; do
             echo "Desktop installation mode selected."
             shift
             ;;
+        --host)
+            HOST_NAME="$2"
+            shift 2
+            ;;
+        --host=*)
+            HOST_NAME="${1#*=}"
+            shift
+            ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--server-install|--desktop-install]"
+            echo "Usage: $0 [--server-install|--desktop-install] [--host NAME]"
             exit 1
             ;;
     esac
 done
 
+echo "Host overlay: $HOST_NAME (looked up in ./hosts/$HOST_NAME)"
+
 # ── Ask installation type if not specified ───────────────────────────
+# Devcontainer/devpod sets $DEVCONTAINER=true (see .devcontainer/Dockerfile).
+# Skip the prompt and force server mode when running inside a container.
+if [[ "$MODE_SPECIFIED" == false && "$DEVCONTAINER" == "true" ]]; then
+    IS_DESKTOP=false
+    MODE_SPECIFIED=true
+    echo "Devcontainer detected (\$DEVCONTAINER=true) — defaulting to server/headless mode."
+fi
+
 if [[ "$MODE_SPECIFIED" == false ]]; then
     read -p "Is this a desktop installation? (y/n): " -n 1 -r
     echo
@@ -123,9 +142,22 @@ export XDG_CONFIG_HOME="$HOME"/.config
 mkdir -p "$XDG_CONFIG_HOME"
 
 # ── dotfiles ──────────────────────────────────────────────────────────
-echo "Running GNU Stow to create symlinks..."
+echo "Running GNU Stow to create symlinks (base package)..."
 stow -v --adopt .
-echo "Dotfiles installed."
+echo "Base dotfiles installed."
+
+# ── Host overlay ──────────────────────────────────────────────────────
+# Each hosts/<name>/ is a separate stow package layered on top of the base.
+# Used for machine-specific config (e.g. monitor/display layouts).
+# Base configs (i3, hyprland) include from host.d/*.conf so missing overlay
+# is a no-op — safe for any machine without a matching hosts/<name>/ dir.
+if [ -d "hosts/$HOST_NAME" ]; then
+    echo "Stowing host overlay: hosts/$HOST_NAME"
+    stow -v --adopt --no-folding -d hosts -t "$HOME" "$HOST_NAME"
+    echo "Host overlay installed."
+else
+    echo "No hosts/$HOST_NAME directory — skipping host overlay (this is fine for new machines)."
+fi
 
 # ── nvim ──────────────────────────────────────────────────────────────
 if [ ! -d "$XDG_CONFIG_HOME/nvim" ]; then
