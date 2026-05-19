@@ -32,9 +32,17 @@
         nsxiv
         i3status-rust
         xdg-desktop-portal-gnome
-        kitty
         waybar
         nerd-fonts.geist-mono
+        # ── i3/hyprland autostart + bind dependencies ───────────
+        dex            # XDG autostart spawner (i3 `dex --autostart`)
+        dmenu          # `dmenu_run` launcher (both i3 and hypr binds)
+        feh            # wallpaper setter (i3 `feh --bg-fill`)
+        flameshot      # screenshot tool ($mod+Shift+S)
+        pavucontrol    # PA mixer GUI (sound block click + $mod+A)
+        libnotify      # `notify-send` (audio sink switch binds)
+        swaybg         # wayland wallpaper (hypr exec-once)
+        swayidle       # wayland idle daemon (hypr exec-once)
       ];
     };
   };

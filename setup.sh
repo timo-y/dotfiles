@@ -88,7 +88,14 @@ declare -a CORE_PACKAGES=("git" "stow" "zsh")
 declare -a CORE_PACKAGES_ARCH=("xz")
 declare -a CORE_PACKAGES_DEBIAN=("xz-utils")
 declare -a CORE_PACKAGES_FEDORA=("xz")
-declare -a DESKTOP_PACKAGES=("alacritty")
+# Desktop deps that need hardware access or system daemons (pactl/libpulse,
+# X-session helpers, NM tray, wayland session lock, polkit agent) belong here.
+# Pure user-space tools (dex, dmenu, feh, flameshot, pavucontrol, libnotify,
+# swaybg, swayidle) live in timosDesktopPackages in config.nix instead.
+declare -a DESKTOP_PACKAGES=("alacritty" "curl" "xdg-utils" "i3lock" "xss-lock" "swaylock")
+declare -a DESKTOP_PACKAGES_ARCH=("libpulse" "network-manager-applet" "polkit-gnome")
+declare -a DESKTOP_PACKAGES_DEBIAN=("pulseaudio-utils" "network-manager-gnome" "policykit-1-gnome")
+declare -a DESKTOP_PACKAGES_FEDORA=("pulseaudio-utils" "NetworkManager-applet" "polkit-gnome")
 
 ((I=I+1))
 echo "[Step $I/$TOTAL_STEPS] Installing packages via native package manager..."
@@ -100,16 +107,23 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_DEBIAN[@]}")
         $SUDO apt update
         if $IS_DESKTOP; then
-            PACKAGES+=("${DESKTOP_PACKAGES[@]}")
+            PACKAGES+=("${DESKTOP_PACKAGES[@]}" "${DESKTOP_PACKAGES_DEBIAN[@]}")
         fi
         $SUDO apt install -y "${PACKAGES[@]}"
+
+        # Register alacritty as the default x-terminal-emulator (Debian only).
+        # Desktop-only: server/devcontainer mode never installs alacritty.
+        if $IS_DESKTOP && command -v alacritty &> /dev/null && command -v update-alternatives &> /dev/null; then
+            $SUDO update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator "$(command -v alacritty)" 50
+            $SUDO update-alternatives --set x-terminal-emulator "$(command -v alacritty)"
+        fi
 
     # ── ARCH ──────────────────────────────────────────────────────────────
     elif command -v pacman &> /dev/null; then
         echo "Detected Arch-based system"
         PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_ARCH[@]}")
         if $IS_DESKTOP; then
-            PACKAGES+=("${DESKTOP_PACKAGES[@]}")
+            PACKAGES+=("${DESKTOP_PACKAGES[@]}" "${DESKTOP_PACKAGES_ARCH[@]}")
         fi
         $SUDO pacman -Sy --noconfirm "${PACKAGES[@]}"
 
@@ -118,7 +132,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         echo "Detected Fedora-based system"
         PACKAGES=("${CORE_PACKAGES[@]}" "${CORE_PACKAGES_FEDORA[@]}")
         if $IS_DESKTOP; then
-            PACKAGES+=("${DESKTOP_PACKAGES[@]}")
+            PACKAGES+=("${DESKTOP_PACKAGES[@]}" "${DESKTOP_PACKAGES_FEDORA[@]}")
         fi
         $SUDO dnf install -y "${PACKAGES[@]}"
 

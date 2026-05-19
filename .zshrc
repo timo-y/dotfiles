@@ -98,6 +98,7 @@ source $ZSH/oh-my-zsh.sh
 #   export EDITOR='nvim'
 # fi
 export EDITOR='nvim'
+export TERMINAL='alacritty'
 
 # Compilation flags
 # export ARCHFLAGS="-arch $(uname -m)"
