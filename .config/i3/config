@@ -244,7 +244,7 @@ bindsym $mod+r mode "window_movements"
 bar {
     # Bar positioning and basic setup
     position                    top
-    status_command             i3status-rs 
+    status_command             i3status-rs
     font                       pango:GeistMono Nerd Font Bold 12
     height                     32
 
@@ -284,7 +284,7 @@ bar {
 # gaps outer 1
 # selected border
 for_window [class=".*"] border pixel 1
-client.focused #006400 #006400 #006400 #006400
+client.focused #006400 #006400 #ffffff #006400
 
 
 

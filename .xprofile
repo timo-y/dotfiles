@@ -1,0 +1,20 @@
+# Sourced by display managers (gdm/sddm/lightdm) and `startx`/`xinit`
+# before the window manager starts, so PATH / NIX_PATH propagate to every
+# X-session child (i3, i3bar status_command, dex, dmenu, flameshot, etc.).
+#
+# i3's `status_command` and `exec` lines run under /bin/sh -c, which does NOT
+# read .zshrc/.bashrc — without this file, nix-installed binaries fail with
+# "command not found" or exit 127 inside the bar.
+
+if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+    . "$HOME/.nix-profile/etc/profile.d/nix.sh"           # single-user nix
+elif [ -e "/etc/profile.d/nix-daemon.sh" ]; then
+    . "/etc/profile.d/nix-daemon.sh"                      # multi-user nix (daemon)
+fi
+
+if [ -d "$HOME/.nix-defexpr/channels" ]; then
+    case ":${NIX_PATH:-}:" in
+        *":$HOME/.nix-defexpr/channels:"*) ;;
+        *) export NIX_PATH="$HOME/.nix-defexpr/channels${NIX_PATH:+:$NIX_PATH}" ;;
+    esac
+fi
