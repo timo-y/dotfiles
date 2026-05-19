@@ -96,6 +96,10 @@ bindsym $mod+Shift+l move right
 # bindsym $mod+Shift+Up move up
 # bindsym $mod+Shift+Right move right
 
+# default no borders
+new_window none
+new_float none
+
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 
@@ -106,7 +110,7 @@ bindsym $mod+Shift+v split toggle
 bindsym $mod+Shift+x border toggle
 
 # # toggle tiling / floating
-# bindsym $mod+Shift+space floating toggle
+bindsym $mod+Shift+f floating toggle
 #
 # # change focus between tiling / floating windows
 # bindsym $mod+space focus mode_toggle
@@ -184,7 +188,7 @@ bindsym $mod+Shift+KP_Insert move container to workspace number $ws10   ; worksp
 assign [class="(?i)(thorium|brave)"] $ws3
 assign [class="(?i)discord"] $ws4
 #assign [class="(?i)upnote"] $ws5
-assign [class="(?i)(mail|thunderbird)"] $ws5
+assign [class="(?i)(mail|thunderbird|betterbird)"] $ws5
 assign [class="(?i)heroic"] $ws6
 assign [class="(?i)steam"] $ws6
 
@@ -200,14 +204,14 @@ bindsym $mod+b exec "brave"
 # UpNote
 bindsym $mod+n exec "upnote"
 # Thunderbird
-bindsym $mod+m exec "thunderbird"
+bindsym $mod+m exec "betterbird"
 # open audio management tool
 bindsym $mod+a exec "pavucontrol"
 # screenshots
 bindsym $mod+Shift+s exec "flameshot gui"
 
 # Audio device switching
-bindsym $mod+Ctrl+n exec "pactl set-default-sink $(pactl list short sinks | grep -i 'headset' | head -n1 | cut -f2) && notify-send 'Audio' 'Switched to Headset'"
+bindsym $mod+Ctrl+n exec "pactl set-default-sink $(pactl list short sinks | grep -i 'usb' | head -n1 | cut -f2) && notify-send 'Audio' 'Switched to Headset'"
 bindsym $mod+Ctrl+s exec "pactl set-default-sink $(pactl list short sinks | grep -i 'umc404hd' | head -n1 | cut -f2) && notify-send 'Audio' 'Switched to UMC404HD'"
 
 # Prefer dark/light
@@ -276,6 +280,14 @@ bar {
     }
 }
 
+# gaps inner 1
+# gaps outer 1
+# selected border
+for_window [class=".*"] border pixel 1
+client.focused #006400 #006400 #006400 #006400
+
+
+
 exec --no-startup-id bash ~/.desktop-session/startup
 
 # Run desktop session startup first
@@ -283,9 +295,8 @@ exec --no-startup-id dbus-update-activation-environment --systemd DISPLAY
 
 # Auto-start applications on specific workspaces (with delay to ensure startup script completes)
 exec --no-startup-id sleep 4 && i3-msg 'workspace 1; exec alacritty -e tmux'
-exec --no-startup-id sleep 4 && i3-msg 'workspace 2; exec alacritty -e nvim .'
 exec --no-startup-id sleep 4 && exec 'brave'
-exec --no-startup-id sleep 4 && exec 'thunderbird'
+exec --no-startup-id sleep 4 && exec 'betterbird'
 exec --no-startup-id sleep 4 && exec 'discord'
 exec --no-startup-id sleep 4 && exec 'caffeine'
 

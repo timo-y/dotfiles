@@ -16,7 +16,7 @@ echo "=== Dotfiles + Dependencies Setup Script ==="
 # ── Parse command line arguments ──────────────────────────────────────
 IS_DESKTOP=false
 MODE_SPECIFIED=false
-HOST_NAME="$(hostname)"
+HOST_NAME="$(uname -n)"
 
 while [[ $# -gt 0 ]]; do
     case $1 in
