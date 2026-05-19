@@ -17,7 +17,7 @@
         lazygit # git gui
         # ── yazi + preview deps ─────────────────────────────────
         yazi              # tui file manager
-        poppler_utils     # pdftoppm: pdf preview
+        poppler-utils     # pdftoppm: pdf preview
         ffmpegthumbnailer # video thumbs
         imagemagick       # broad image formats (heic, etc.)
         chafa             # terminal image preview fallback
