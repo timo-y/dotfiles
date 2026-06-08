@@ -35,7 +35,3 @@ open = [
   { run = 'xdg-open "$1"',        desc = "Open", for = "linux" },
 ]
 
-[open]
-prepend_rules = [
-  { name = "*.pdf", use = "open" },
-]

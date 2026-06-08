@@ -134,7 +134,7 @@ if command -v eza &> /dev/null; then
     alias ls="eza --icons --group-directories-first"
     alias ld="eza -D --icons=always --color=always"
     alias lf="eza -f --icons=always --color=always --git-ignore"
-    alias ll="eza --icons --group-directories-first -l -b --total-size -g -h"
+    alias ll="eza --icons --group-directories-first -l -b -g -h"
     alias la='eza -a --color=always --group-directories-first'
     alias lt='eza -aT -L 2 --color=always --group-directories-first'
     alias l.='eza -a | grep -E "^\."'
