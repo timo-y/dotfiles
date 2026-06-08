@@ -43,6 +43,10 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
+# Brightness
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +10%
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 10%-
+
 # Disable focus follows mouse
 focus_follows_mouse no
 
@@ -183,6 +187,8 @@ bindsym $mod+Shift+KP_Up move container to workspace number $ws8        ; worksp
 bindsym $mod+Shift+KP_Prior move container to workspace number $ws9     ; workspace number $ws9
 bindsym $mod+Shift+KP_Insert move container to workspace number $ws10   ; workspace number $ws10
 
+# move screen to next monitor
+bindsym $mod+Shift+n move workspace to output next
 
 # Application rules (case-insensitive)
 assign [class="(?i)(thorium|brave)"] $ws3

@@ -1,7 +1,7 @@
 icons_format = "{icon}"
 
 [theme]
-theme = "solarized-dark"
+theme = "srcery"
 [theme.overrides]
 
 [icons]
@@ -54,7 +54,7 @@ cmd = "pavucontrol"
 
 [[block]]
 block = "custom"
-command = "echo '\uf0ac ' `curl http://checkip.amazonaws.com`" # assumes fontawesome icons
+command = "echo '\uf0ac '`curl http://checkip.amazonaws.com`" # assumes fontawesome icons
 interval = 60
 
 [[block]]
