@@ -271,26 +271,27 @@ bar {
 
     # Enhanced color scheme with gradients and depth
     colors {
-        # Base colors with subtle transparency
-        background         #1a1a2e
-        statusline         #f8f8f2
-        separator          #44475a
+    background         #1C1B19
+    statusline         #FFFFFF
+    separator          #45433E
 
-        # Workspace state colors with improved contrast and spacing
-        #                   border    background text      
-        focused_workspace   #bd93f9   #6272a4    #f8f8f2    # Purple accent for active
-        active_workspace    #50fa7b   #44475a    #f8f8f2    # Green for visible unfocused  
-        inactive_workspace  #6272a4   #282a36    #f8f8f2    # Muted blue for inactive
-        urgent_workspace    #ff5555   #ff5555    #f8f8f2    # Red for urgent
-        binding_mode        #ff79c6   #ff79c6    #f8f8f2    # Pink for binding modes
+    #                   border    background text
+    focused_workspace   #2C78BF   #1E5181    #FCE8C3
+    active_workspace    #519F50   #294229    #FCE8C3
+    inactive_workspace  #45433E   #1C1B19    #917E6B
+    urgent_workspace    #EF2F27   #4F2321    #FCE8C3
+    binding_mode        #E02C6D   #312F2C    #FCE8C3
     }
 }
 
-# gaps inner 1
-# gaps outer 1
-# selected border
 for_window [class=".*"] border pixel 1
-client.focused #006400 #006400 #ffffff #006400
+
+# client.focused        border    background text      indicator  child_border
+client.focused          #2C78BF   #1E5181    #FCE8C3  #FBB829    #2C78BF
+client.focused_inactive #45433E   #262522    #917E6B  #3B3935    #3B3935
+client.unfocused        #3B3935   #1C1B19    #45433E  #1C1B19    #1C1B19
+client.urgent           #EF2F27   #4F2321    #FCE8C3  #EF2F27    #EF2F27
+client.placeholder      #121110   #121110    #45433E  #121110    #121110
 
 
 
