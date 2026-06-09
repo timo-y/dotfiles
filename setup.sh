@@ -75,7 +75,7 @@ else
     echo "Setting up for server/headless environment..."
 fi
 
-TOTAL_STEPS=4
+TOTAL_STEPS=5
 I=0
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                       Dependencies                       │
@@ -236,6 +236,13 @@ else
 fi
 # ── Install zsh plugins ───────────────────────────────────────────────
 sh ./install_zsh_plugins.sh
+
+echo "zsh plugins installed."
+
+((I=I+1))
+echo "[Step $I/$TOTAL_STEPS] Installing tmux plugins..."
+# ── Install tmux plugins ───────────────────────────────────────────────
+sh ./install_tmux_plugins.sh
 
 echo "All packages installed."
 
