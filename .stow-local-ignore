@@ -27,6 +27,7 @@ _darcs
 
 setup.sh
 install_zsh_plugins.sh
+install_tmux_plugins.sh
 
 # Host overlays — stowed separately via setup.sh --host <name>
 ^/hosts
