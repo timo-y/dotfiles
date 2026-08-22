@@ -5,3 +5,5 @@ theme = Srcery
 font-size= 14.0
 
 window-decoration = none
+
+confirm-close-surface = false
