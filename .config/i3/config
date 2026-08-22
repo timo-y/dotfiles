@@ -224,6 +224,8 @@ bindsym $mod+Ctrl+s exec "pactl set-default-sink $(pactl list short sinks | grep
 bindsym $mod+Shift+b exec "gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'"
 bindsym $mod+Shift+m exec "gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'"
 
+exec_always --no-startup-id setxkbmap -layout us -option compose:ralt
+
 mode "window_movements" {
         bindsym h move left; 
         bindsym j move down; 
@@ -305,7 +307,6 @@ exec --no-startup-id sleep 4 && i3-msg 'workspace 1; exec alacritty -e tmux'
 exec --no-startup-id sleep 4 && exec 'brave'
 exec --no-startup-id sleep 4 && exec 'betterbird'
 exec --no-startup-id sleep 4 && exec 'discord'
-exec --no-startup-id sleep 4 && exec 'caffeine'
 
 # Return to workspace 3 after startup
 exec --no-startup-id i3-msg 'workspace 3'
