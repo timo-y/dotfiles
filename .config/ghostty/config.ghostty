@@ -1,4 +1,5 @@
 theme = Srcery
+cursor-color = #ffffff
 
 # Empty values reset the configuration to the default value
 # font-family = GeistMono Nerd Font
