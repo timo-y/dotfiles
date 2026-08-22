@@ -1,0 +1,10 @@
+theme = Srcery
+cursor-color = #ffffff
+
+# Empty values reset the configuration to the default value
+# font-family = GeistMono Nerd Font
+font-size= 14.0
+
+window-decoration = none
+
+confirm-close-surface = false
