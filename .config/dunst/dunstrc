@@ -1,0 +1,60 @@
+[global]
+    monitor = 0
+    width = (0, 300)
+    origin = top-right
+    offset = (10, 15)
+    origin = bottom-right
+    notification_limit = 5
+    shrink = yes
+
+    # Appearance
+    transparency = 15
+    separator_height = 2
+    padding = 10
+    horizontal_padding = 12
+    text_icon_padding = 8
+    frame_width = 1
+    frame_color = "#3c3836"
+    separator_color = frame
+    corner_radius = 8
+
+    # Text
+    font = "Fira Code Nerd Font 11"
+    line_height = 4
+    markup = full
+    format = "%s\n%b"
+    alignment = left
+    show_indicators = false
+    stack_duplicates = true
+    hide_duplicate_count = true
+
+    # Icons
+    enable_recursive_icon_lookup = true
+    icon_theme = "Papirus-Dark, Adwaita"
+    icon_position = left
+    min_icon_size = 24
+    max_icon_size = 48
+
+    # Behaviour
+    idle_threshold = 120
+    mouse_left_click = close_current
+    mouse_middle_click = do_action, close_current
+    mouse_right_click = close_all
+
+[urgency_low]
+    background = "#262522"
+    foreground = "#917E6B"
+    frame_color = "#3B3935"
+    timeout = 5
+
+[urgency_normal]
+    background = "#262522"
+    foreground = "#C5B088"
+    frame_color = "#3B3935"
+    timeout = 10
+
+[urgency_critical]
+    background = "#262522"
+    foreground = "#FCE8C3"
+    frame_color = "#EF2F27"
+    timeout = 0
