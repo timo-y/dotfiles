@@ -8,3 +8,51 @@ font-size= 14.0
 window-decoration = none
 
 confirm-close-surface = false
+
+# Ghostty binds alt+1..alt+9 to goto_tab/last_tab by default. A trigger that is
+# a single codepoint matches ANY key producing that codepoint, so alt+numpad1
+# (which produces "1") is swallowed by Ghostty and never reaches tmux.
+# Unbinding lets the keys through to tmux, which maps M-1..M-9 to select-window.
+keybind = alt+1=unbind
+keybind = alt+2=unbind
+keybind = alt+3=unbind
+keybind = alt+4=unbind
+keybind = alt+5=unbind
+keybind = alt+6=unbind
+keybind = alt+7=unbind
+keybind = alt+8=unbind
+keybind = alt+9=unbind
+# Also drop the physical (layout independent) variants of the same binds.
+keybind = alt+digit_1=unbind
+keybind = alt+digit_2=unbind
+keybind = alt+digit_3=unbind
+keybind = alt+digit_4=unbind
+keybind = alt+digit_5=unbind
+keybind = alt+digit_6=unbind
+keybind = alt+digit_7=unbind
+keybind = alt+digit_8=unbind
+
+# Ghostty's own keypad encoding sends the bare digit and drops the alt/ESC
+# prefix, so tmux never sees M-1 (alacritty prefixed ESC, which is why this
+# used to work). Bind the numpad keys explicitly to "ESC + digit" so tmux can
+# match its `bind -n M-1..M-9 select-window` bindings.
+# (NumLock on:)
+keybind = alt+numpad_1=text:\x1b1
+keybind = alt+numpad_2=text:\x1b2
+keybind = alt+numpad_3=text:\x1b3
+keybind = alt+numpad_4=text:\x1b4
+keybind = alt+numpad_5=text:\x1b5
+keybind = alt+numpad_6=text:\x1b6
+keybind = alt+numpad_7=text:\x1b7
+keybind = alt+numpad_8=text:\x1b8
+keybind = alt+numpad_9=text:\x1b9
+# (NumLock off: the same physical keys report as navigation keys.)
+keybind = alt+numpad_end=text:\x1b1
+keybind = alt+numpad_down=text:\x1b2
+keybind = alt+numpad_page_down=text:\x1b3
+keybind = alt+numpad_left=text:\x1b4
+keybind = alt+numpad_begin=text:\x1b5
+keybind = alt+numpad_right=text:\x1b6
+keybind = alt+numpad_home=text:\x1b7
+keybind = alt+numpad_up=text:\x1b8
+keybind = alt+numpad_page_up=text:\x1b9
