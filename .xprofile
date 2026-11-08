@@ -18,3 +18,10 @@ if [ -d "$HOME/.nix-defexpr/channels" ]; then
         *) export NIX_PATH="$HOME/.nix-defexpr/channels${NIX_PATH:+:$NIX_PATH}" ;;
     esac
 fi
+
+# Sway prints a hard-coded "Proprietary GPU drivers are not supported"
+# warning whenever it detects the NVIDIA userspace driver (even with the
+# nvidia-open kernel modules). The driver works through GBM on current
+# versions; this only suppresses the official-support warning.
+# Remove this if you switch to nouveau/NVK.
+export SWAY_UNSUPPORTED_GPU=true
