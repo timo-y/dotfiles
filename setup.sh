@@ -185,8 +185,9 @@ echo "Base dotfiles installed."
 # ── Host overlay ──────────────────────────────────────────────────────
 # Each hosts/<name>/ is a separate stow package layered on top of the base.
 # Used for machine-specific config (e.g. monitor/display layouts).
-# Base configs (i3, hyprland) include from host.d/*.conf so missing overlay
-# is a no-op — safe for any machine without a matching hosts/<name>/ dir.
+# Base configs (i3, sway) include from host.d/*.conf and the Hyprland Lua
+# config loads host.d/display.lua if present, so a missing overlay is a no-op
+# — safe for any machine without a matching hosts/<name>/ dir.
 if [ -d "hosts/$HOST_NAME" ]; then
     echo "Stowing host overlay: hosts/$HOST_NAME"
     stow -v --adopt --no-folding -d hosts -t "$HOME" "$HOST_NAME"

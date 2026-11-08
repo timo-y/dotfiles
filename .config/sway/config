@@ -61,8 +61,8 @@ output * bg ~/.config/hypr/background.jpg fill #1C1B19
 # tiling_drag modifier titlebar
 
 # start a terminal
-bindsym $mod+Return exec "ghostty -e tmux"
-bindsym $mod+Shift+Return exec "ghostty -e nvim ."
+bindsym $mod+Return exec "env GTK_IM_MODULE=gtk-im-context-simple ghostty -e tmux"
+bindsym $mod+Shift+Return exec "env GTK_IM_MODULE=gtk-im-context-simple ghostty -e nvim ."
 # bindsym $mod+Shift+Return  "ghostty -e nvim ."
 
 # kill focused window
@@ -313,7 +313,7 @@ exec --no-startup-id [ -f ~/.desktop-session/startup ] && bash ~/.desktop-sessio
 exec --no-startup-id dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
 
 # Auto-start applications on specific workspaces (with delay to ensure startup script completes)
-exec --no-startup-id sleep 4 && swaymsg 'workspace 1; exec ghostty -e tmux'
+exec --no-startup-id sleep 4 && swaymsg 'workspace 1; exec env GTK_IM_MODULE=gtk-im-context-simple ghostty -e tmux'
 exec --no-startup-id sleep 4 && exec 'brave'
 exec --no-startup-id sleep 4 && exec 'betterbird'
 exec --no-startup-id sleep 4 && exec 'discord'

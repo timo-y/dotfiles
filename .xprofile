@@ -25,3 +25,9 @@ fi
 # versions; this only suppresses the official-support warning.
 # Remove this if you switch to nouveau/NVK.
 export SWAY_UNSUPPORTED_GPU=true
+
+# GTK4's default Wayland IM context can lose dead-key compose sequences under
+# sway (e.g. Ghostty typing ^ or `). Force GTK's compose-table simple IM.
+# If this ever breaks a real IME (ibus/fcitx), remove it and force Ghostty to
+# XWayland instead with GDK_BACKEND=x11.
+export GTK_IM_MODULE=gtk-im-context-simple

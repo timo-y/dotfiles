@@ -31,3 +31,5 @@ install_tmux_plugins.sh
 
 # Host overlays — stowed separately via setup.sh --host <name>
 ^/hosts
+
+.ai-jail
