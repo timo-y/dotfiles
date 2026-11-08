@@ -2,6 +2,10 @@
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 export XDG_CONFIG_HOME="$HOME/.config"
 
+# GTK4 Wayland's default IM context can drop dead keys under sway.
+# Force GTK's compose-table simple IM (Ghostty dead keys: ^, `, etc.).
+export GTK_IM_MODULE=gtk-im-context-simple
+
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 

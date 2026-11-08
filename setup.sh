@@ -156,15 +156,38 @@ export XDG_CONFIG_HOME="$HOME"/.config
 mkdir -p "$XDG_CONFIG_HOME"
 
 # ── dotfiles ──────────────────────────────────────────────────────────
+# --no-folding is required: a folded `~/.config` or `~/.config/sway`
+# symlink would block the host overlay below from adding e.g.
+# `~/.config/sway/host.d`.
+#
+# Older installs may already have folded symlinks. Unfold only the trees
+# the host overlays write into (their contents live in this repo).
+if [ -L "$XDG_CONFIG_HOME" ]; then
+    case "$(readlink -f "$XDG_CONFIG_HOME")" in
+        "$(pwd)/.config")
+            echo "Unfolding legacy symlink: $XDG_CONFIG_HOME"
+            rm "$XDG_CONFIG_HOME"
+            mkdir -p "$XDG_CONFIG_HOME"
+            ;;
+    esac
+fi
+for d in sway i3 hypr; do
+    if [ -L "$XDG_CONFIG_HOME/$d" ]; then
+        echo "Unfolding legacy symlink: $XDG_CONFIG_HOME/$d"
+        rm "$XDG_CONFIG_HOME/$d"
+    fi
+done
+
 echo "Running GNU Stow to create symlinks (base package)..."
-stow -v --adopt .
+stow -v --adopt --no-folding .
 echo "Base dotfiles installed."
 
 # ── Host overlay ──────────────────────────────────────────────────────
 # Each hosts/<name>/ is a separate stow package layered on top of the base.
 # Used for machine-specific config (e.g. monitor/display layouts).
-# Base configs (i3, hyprland) include from host.d/*.conf so missing overlay
-# is a no-op — safe for any machine without a matching hosts/<name>/ dir.
+# Base configs (i3, sway) include from host.d/*.conf and the Hyprland Lua
+# config loads host.d/display.lua if present, so a missing overlay is a no-op
+# — safe for any machine without a matching hosts/<name>/ dir.
 if [ -d "hosts/$HOST_NAME" ]; then
     echo "Stowing host overlay: hosts/$HOST_NAME"
     stow -v --adopt --no-folding -d hosts -t "$HOME" "$HOST_NAME"

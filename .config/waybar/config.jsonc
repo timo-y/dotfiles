@@ -9,7 +9,7 @@
     "modules-left": [
         "clock",
         "custom/weather",
-        "wlr/workspaces"
+        "hyprland/workspaces"
     ],
     "modules-center": [
         "hyprland/window"
@@ -28,21 +28,14 @@
     "hyprland/window": {
         "format": "{}"
     },
-    "wlr/workspaces": {
+    "hyprland/workspaces": {
         "disable-scroll": true,
         "all-outputs": true,
         "on-click": "activate",
-        "persistent_workspaces": {
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": [],
-            "10": []
+        "sort-by-number": true,
+        // always show workspaces 1-10, like i3's workspace buttons
+        "persistent-workspaces": {
+            "*": 10
         }
     },
     "custom/power_profile": {
