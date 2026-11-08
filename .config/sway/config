@@ -69,8 +69,12 @@ bindsym $mod+Shift+Return exec "ghostty -e nvim ."
 bindsym $mod+Shift+q kill
 
 
-# start application launcher (wofi is Wayland-native; dmenu_run is X11-only)
-bindsym $mod+d exec --no-startup-id wofi --show drun
+# i3-style command runner (dmenu_run equivalent).
+# run mode lists $PATH executables, but --exec-search lets you press Enter on
+# arbitrary typed input, and run-always_parse_args handles "shutdown now".
+bindsym $mod+d exec --no-startup-id wofi --show run --define run-always_parse_args=true --exec-search
+# Keep a separate app launcher for .desktop entries.
+bindsym $mod+Shift+d exec --no-startup-id wofi --show drun
 
 # change focus
 bindsym $mod+h focus left
@@ -148,17 +152,19 @@ bindsym $mod+7 workspace number $ws7
 bindsym $mod+8 workspace number $ws8
 bindsym $mod+9 workspace number $ws9
 bindsym $mod+0 workspace number $ws10
-# switch to workspace using numpad (Num Lock on)
-bindsym $mod+mod2+KP_1 workspace $ws1
-bindsym $mod+mod2+KP_2 workspace $ws2
-bindsym $mod+mod2+KP_3 workspace $ws3
-bindsym $mod+mod2+KP_4 workspace $ws4
-bindsym $mod+mod2+KP_5 workspace $ws5
-bindsym $mod+mod2+KP_6 workspace $ws6
-bindsym $mod+mod2+KP_7 workspace $ws7
-bindsym $mod+mod2+KP_8 workspace $ws8
-bindsym $mod+mod2+KP_9 workspace $ws9
-bindsym $mod+mod2+KP_0 workspace $ws10
+# switch to workspace using the physical numpad keys.
+# bindcode uses XKB keycodes (evdev keycode + 8) and ignores Num Lock/Mod2,
+# which sway consumes for numpad keys.
+bindcode $mod+87 workspace $ws1
+bindcode $mod+88 workspace $ws2
+bindcode $mod+89 workspace $ws3
+bindcode $mod+83 workspace $ws4
+bindcode $mod+84 workspace $ws5
+bindcode $mod+85 workspace $ws6
+bindcode $mod+79 workspace $ws7
+bindcode $mod+80 workspace $ws8
+bindcode $mod+81 workspace $ws9
+bindcode $mod+90 workspace $ws10
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace number $ws1; workspace number $ws1
@@ -171,18 +177,17 @@ bindsym $mod+Shift+7 move container to workspace number $ws7; workspace number $
 bindsym $mod+Shift+8 move container to workspace number $ws8; workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9; workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10; workspace number $ws10
-# move focused container to workspace using numpad (Num Lock on)
-# Move container to workspace using numpad (with Shift)
-bindsym $mod+Shift+mod2+KP_1 move container to workspace number $ws1; workspace number $ws1
-bindsym $mod+Shift+mod2+KP_2 move container to workspace number $ws2; workspace number $ws2
-bindsym $mod+Shift+mod2+KP_3 move container to workspace number $ws3; workspace number $ws3
-bindsym $mod+Shift+mod2+KP_4 move container to workspace number $ws4; workspace number $ws4
-bindsym $mod+Shift+mod2+KP_5 move container to workspace number $ws5; workspace number $ws5
-bindsym $mod+Shift+mod2+KP_6 move container to workspace number $ws6; workspace number $ws6
-bindsym $mod+Shift+mod2+KP_7 move container to workspace number $ws7; workspace number $ws7
-bindsym $mod+Shift+mod2+KP_8 move container to workspace number $ws8; workspace number $ws8
-bindsym $mod+Shift+mod2+KP_9 move container to workspace number $ws9; workspace number $ws9
-bindsym $mod+Shift+mod2+KP_0 move container to workspace number $ws10; workspace number $ws10
+# move focused container to workspace using the physical numpad keys
+bindcode $mod+Shift+87 move container to workspace number $ws1; workspace number $ws1
+bindcode $mod+Shift+88 move container to workspace number $ws2; workspace number $ws2
+bindcode $mod+Shift+89 move container to workspace number $ws3; workspace number $ws3
+bindcode $mod+Shift+83 move container to workspace number $ws4; workspace number $ws4
+bindcode $mod+Shift+84 move container to workspace number $ws5; workspace number $ws5
+bindcode $mod+Shift+85 move container to workspace number $ws6; workspace number $ws6
+bindcode $mod+Shift+79 move container to workspace number $ws7; workspace number $ws7
+bindcode $mod+Shift+80 move container to workspace number $ws8; workspace number $ws8
+bindcode $mod+Shift+81 move container to workspace number $ws9; workspace number $ws9
+bindcode $mod+Shift+90 move container to workspace number $ws10; workspace number $ws10
 
 # move workspace to the monitor on the right (sway has no "next" output)
 bindsym $mod+Shift+n move workspace to output right
@@ -234,16 +239,16 @@ mode "window_movements" {
         bindsym k move up; 
         bindsym l move right;
 
-        bindsym mod2+KP_1 move container to workspace number $ws1; workspace number $ws1
-        bindsym mod2+KP_2 move container to workspace number $ws2; workspace number $ws2
-        bindsym mod2+KP_3 move container to workspace number $ws3; workspace number $ws3
-        bindsym mod2+KP_4 move container to workspace number $ws4; workspace number $ws4
-        bindsym mod2+KP_5 move container to workspace number $ws5; workspace number $ws5
-        bindsym mod2+KP_6 move container to workspace number $ws6; workspace number $ws6
-        bindsym mod2+KP_7 move container to workspace number $ws7; workspace number $ws7
-        bindsym mod2+KP_8 move container to workspace number $ws8; workspace number $ws8
-        bindsym mod2+KP_9 move container to workspace number $ws9; workspace number $ws9
-        bindsym mod2+KP_0 move container to workspace number $ws10; workspace number $ws10
+        bindcode 87 move container to workspace number $ws1; workspace number $ws1
+        bindcode 88 move container to workspace number $ws2; workspace number $ws2
+        bindcode 89 move container to workspace number $ws3; workspace number $ws3
+        bindcode 83 move container to workspace number $ws4; workspace number $ws4
+        bindcode 84 move container to workspace number $ws5; workspace number $ws5
+        bindcode 85 move container to workspace number $ws6; workspace number $ws6
+        bindcode 79 move container to workspace number $ws7; workspace number $ws7
+        bindcode 80 move container to workspace number $ws8; workspace number $ws8
+        bindcode 81 move container to workspace number $ws9; workspace number $ws9
+        bindcode 90 move container to workspace number $ws10; workspace number $ws10
 
         bindsym Return mode "default"
         bindsym Escape mode "default"
