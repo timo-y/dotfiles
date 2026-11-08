@@ -39,6 +39,7 @@ bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 10%-
 # Keyboard layout (German). Sway reads xkb directly; no setxkbmap needed.
 input "type:keyboard" {
     xkb_layout de
+    xkb_numlock enabled
 }
 
 # X11-only keymap settings (LightDM reads /etc/X11/Xkbmap and ~/.Xkbmap)
