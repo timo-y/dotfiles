@@ -27,6 +27,23 @@ chmod +x setup.sh
 
 After completion, restart your shell or run `source ~/.zshrc`.
 
+#### Host overlays
+Machine-specific config (monitor layout, workspace pinning, etc.) lives in
+`hosts/<hostname>/` and is stowed as a **separate** package. If you stow
+manually, install both the base package and the overlay, and use
+`--no-folding` so the overlay can merge into `~/.config`:
+
+```bash
+cd ~/dotfiles
+stow -v --adopt --no-folding .
+stow -v --adopt --no-folding -d hosts -t "$HOME" "$(uname -n)"
+swaymsg reload
+```
+
+If `~/.config/sway` (or `i3`/`hypr`) is already a folded symlink from an older
+install, remove that symlink first; otherwise stow will refuse to add
+`host.d/` inside it. `setup.sh` now does this automatically.
+
 ### Devpod
 
 On the local machine:

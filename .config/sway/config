@@ -41,6 +41,11 @@ input "type:keyboard" {
     xkb_layout de
 }
 
+# X11-only keymap settings (LightDM reads /etc/X11/Xkbmap and ~/.Xkbmap)
+# are not applied to a Wayland session. Re-apply them on start/reload so
+# options such as a Compose key keep working with the Glove80.
+exec_always --no-startup-id ~/.config/sway/apply-xkbmap.sh
+
 # Disable focus follows mouse
 focus_follows_mouse no
 

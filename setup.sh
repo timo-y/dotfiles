@@ -156,8 +156,30 @@ export XDG_CONFIG_HOME="$HOME"/.config
 mkdir -p "$XDG_CONFIG_HOME"
 
 # ── dotfiles ──────────────────────────────────────────────────────────
+# --no-folding is required: a folded `~/.config` or `~/.config/sway`
+# symlink would block the host overlay below from adding e.g.
+# `~/.config/sway/host.d`.
+#
+# Older installs may already have folded symlinks. Unfold only the trees
+# the host overlays write into (their contents live in this repo).
+if [ -L "$XDG_CONFIG_HOME" ]; then
+    case "$(readlink -f "$XDG_CONFIG_HOME")" in
+        "$(pwd)/.config")
+            echo "Unfolding legacy symlink: $XDG_CONFIG_HOME"
+            rm "$XDG_CONFIG_HOME"
+            mkdir -p "$XDG_CONFIG_HOME"
+            ;;
+    esac
+fi
+for d in sway i3 hypr; do
+    if [ -L "$XDG_CONFIG_HOME/$d" ]; then
+        echo "Unfolding legacy symlink: $XDG_CONFIG_HOME/$d"
+        rm "$XDG_CONFIG_HOME/$d"
+    fi
+done
+
 echo "Running GNU Stow to create symlinks (base package)..."
-stow -v --adopt .
+stow -v --adopt --no-folding .
 echo "Base dotfiles installed."
 
 # ── Host overlay ──────────────────────────────────────────────────────
