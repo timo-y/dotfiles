@@ -83,6 +83,13 @@ hl.config({
     },
 })
 
+-- Corne: German layout (i3: setxkbmap -device <corne> -layout de).
+-- `hyprctl devices` reports the device name lowercased with spaces as dashes.
+hl.device({
+    name      = "timos-corne-keyboard",
+    kb_layout = "de",
+})
+
 -- i3: new_float none — no border on floating windows.
 hl.window_rule({
     name        = "no-border-floating",

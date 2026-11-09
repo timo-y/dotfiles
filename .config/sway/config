@@ -43,6 +43,12 @@ input "type:keyboard" {
     xkb_numlock enabled
 }
 
+# Corne: German layout, same as i3 (setxkbmap -device <corne> -layout de).
+# Sway identifiers are vendor:product:Name, spaces as underscores.
+input "1d50:615e:Timos_Corne_Keyboard" {
+    xkb_layout de
+}
+
 # X11-only keymap settings (LightDM reads /etc/X11/Xkbmap and ~/.Xkbmap)
 # are not applied to a Wayland session. Re-apply them on start/reload so
 # options such as a Compose key keep working with the Glove80.
