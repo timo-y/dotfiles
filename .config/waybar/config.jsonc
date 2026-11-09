@@ -32,11 +32,8 @@
         "disable-scroll": true,
         "all-outputs": true,
         "on-click": "activate",
-        "sort-by-number": true,
-        // always show workspaces 1-10, like i3's workspace buttons
-        "persistent-workspaces": {
-            "*": 10
-        }
+        "sort-by-number": true
+        // no "persistent-workspaces": only non-empty workspaces are shown
     },
     "custom/power_profile": {
         //shows the current power profile and switches to next on click
