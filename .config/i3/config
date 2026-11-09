@@ -136,8 +136,9 @@ set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
 
-# Host-specific display/workspace-output config lives in hosts/<name>/.config/i3/host.d/
-# Empty glob (laptop without overlay) is a no-op — i3 silently skips missing matches.
+# Host-specific display/workspace-output/keyboard config lives in
+# hosts/<name>/.config/i3/host.d/
+# Empty glob (machine without overlay) is a no-op — i3 silently skips missing matches.
 include ~/.config/i3/host.d/*.conf
 
 # switch to workspace
@@ -224,7 +225,11 @@ bindsym $mod+Ctrl+s exec "pactl set-default-sink $(pactl list short sinks | grep
 bindsym $mod+Shift+b exec "gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'"
 bindsym $mod+Shift+m exec "gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'"
 
-exec_always --no-startup-id ~/dotfiles/.config/i3/set-keyboard-layouts.sh
+# Apply host-specific keyboard layouts (tptimo: US laptop + German Corne,
+# HOME-PC: German). The script ships with the host overlay in
+# hosts/<name>/.config/i3/, so machines without an overlay keep the X server
+# default and the test simply fails.
+exec_always --no-startup-id [ -x ~/.config/i3/set-keyboard-layouts.sh ] && ~/.config/i3/set-keyboard-layouts.sh
 
 mode "window_movements" {
         bindsym h move left; 

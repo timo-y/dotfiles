@@ -22,21 +22,11 @@ end
 -- Whichever matches the current Num Lock state fires; the other never can.
 local numpad_codes = { 87, 88, 89, 83, 84, 85, 79, 80, 81, 90 }
 
--- Host-specific monitor/workspace layout lives in hosts/<name>/.config/hypr/host.d/.
--- A machine without that overlay simply skips it (same no-op contract as the
--- `include host.d/*.conf` lines in the i3/sway configs).
-local overlay = os.getenv("HOME") .. "/.config/hypr/host.d/display.lua"
-local overlay_fh = io.open(overlay, "r")
-if overlay_fh then
-    overlay_fh:close()
-    dofile(overlay)
-end
-
--- ── Look and feel (i3: border pixel 1, no gaps, no effects) ─────────────────
+-- ── Look and feel (i3: border pixel 1, small gaps, rounded corners) ─────────
 hl.config({
     general = {
-        gaps_in     = 0,
-        gaps_out    = 0,
+        gaps_in     = 2,
+        gaps_out    = 4,
         border_size = 1,                     -- i3: for_window [class=".*"] border pixel 1
 
         col = {
@@ -49,13 +39,20 @@ hl.config({
     },
 
     decoration = {
-        rounding = 0,
-        blur     = { enabled = false },
+        rounding = 8,
+        blur     = {
+            enabled = true,
+            size    = 3, -- small radius, keeps text behind readable
+            passes  = 2,
+        },
         shadow   = { enabled = false },
+
+        -- Only unfocused windows are translucent so the blur shows through.
+        inactive_opacity = 0.95,
     },
 
-    -- i3 has no animations; set enabled = true for Hyprland's default feel.
-    animations = { enabled = false },
+    -- i3 has no animations; set enabled = false for a snappier, i3-like feel.
+    animations = { enabled = true },
 
     -- Keeps the split direction sticky, like an i3 container split.
     dwindle = { preserve_split = true },
@@ -68,11 +65,8 @@ hl.config({
     },
 
     input = {
-        kb_layout  = "us", -- i3: US default on this laptop (tptimo)
-        kb_variant = "",
-        kb_model   = "",
-        kb_options = "",
-        kb_rules   = "",
+        -- Keyboard layout is host-specific (tptimo: US laptop + German Corne,
+        -- HOME-PC: German). See host.d/keyboard.lua in the host overlay.
 
         -- i3 reaches the numpad with Mod4+mod2 (Num Lock on); mirror that.
         numlock_by_default = true,
@@ -83,12 +77,18 @@ hl.config({
     },
 })
 
--- Corne: German layout (i3: setxkbmap -device <corne> -layout de).
--- `hyprctl devices` reports the device name lowercased with spaces as dashes.
-hl.device({
-    name      = "timos-corne-keyboard",
-    kb_layout = "de",
-})
+-- ── Animations ──────────────────────────────────────────────────────────────
+-- One fast ease-out curve for every leaf. NOTE: in this Hyprland version speed
+-- is a duration, not a rate: duration = speed * 100 ms (lower = snappier).
+hl.curve("quick", { type = "bezier", points = { { 0.15, 0 }, { 0.1, 1 } } })
+
+hl.animation({ leaf = "global",     enabled = true, speed = 1,   bezier = "quick" })
+hl.animation({ leaf = "windows",    enabled = true, speed = 1.8, bezier = "quick" })
+hl.animation({ leaf = "windowsIn",  enabled = true, speed = 1.8, bezier = "quick", style = "popin 90%" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.5, bezier = "quick", style = "popin 90%" })
+hl.animation({ leaf = "fade",       enabled = true, speed = 1.5, bezier = "quick" })
+hl.animation({ leaf = "layers",     enabled = true, speed = 1.8, bezier = "quick" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 1.5, bezier = "quick" })
 
 -- i3: new_float none — no border on floating windows.
 hl.window_rule({
@@ -285,3 +285,19 @@ hl.define_submap("window_movements", function()
 end)
 
 hl.bind(mod .. " + R", hl.dsp.submap("window_movements"))
+
+-- ── Host overlay ───────────────────────────────────────────────────────────
+-- Host-specific monitor/workspace layout and keyboard layout live in
+-- hosts/<name>/.config/hypr/host.d/. Each file is optional; a machine without
+-- that overlay simply skips it (same no-op contract as the
+-- `include host.d/*.conf` lines in the i3/sway configs). Loaded last so the
+-- host can override base settings such as the keyboard layout.
+local overlay_dir = os.getenv("HOME") .. "/.config/hypr/host.d"
+for _, name in ipairs({ "display.lua", "keyboard.lua" }) do
+    local path = overlay_dir .. "/" .. name
+    local overlay_fh = io.open(path, "r")
+    if overlay_fh then
+        overlay_fh:close()
+        dofile(path)
+    end
+end

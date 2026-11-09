@@ -28,8 +28,13 @@ chmod +x setup.sh
 After completion, restart your shell or run `source ~/.zshrc`.
 
 #### Host overlays
-Machine-specific config (monitor layout, workspace pinning, etc.) lives in
-`hosts/<hostname>/` and is stowed as a **separate** package. If you stow
+Machine-specific config (monitor/display layout, keyboard layouts, workspace
+pinning, etc.) lives in `hosts/<hostname>/` and is stowed as a **separate**
+package. The base configs contain no host-specific display or keyboard
+settings: the window managers include `~/.config/<wm>/host.d/*.conf` (i3,
+sway) and the Hyprland Lua config loads `host.d/display.lua` and
+`host.d/keyboard.lua` if present. Missing overlays are a no-op, so a new
+machine works with the base package alone. If you stow
 manually, install both the base package and the overlay, and use
 `--no-folding` so the overlay can merge into `~/.config`:
 
@@ -43,6 +48,10 @@ swaymsg reload
 If `~/.config/sway` (or `i3`/`hypr`) is already a folded symlink from an older
 install, remove that symlink first; otherwise stow will refuse to add
 `host.d/` inside it. `setup.sh` now does this automatically.
+
+Current overlays:
+- `hosts/tptimo/`: laptop — US keyboard (German Corne), no display overrides.
+- `hosts/HOME-PC/`: desktop — German keyboard and dual-monitor layout.
 
 ### Devpod
 

@@ -40,18 +40,10 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +10%
 bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 10%-
 
-# Keyboard layout (US on this laptop). Sway reads xkb directly; no setxkbmap
-# needed. i3 does the same in ~/.config/i3/set-keyboard-layouts.sh.
-input "type:keyboard" {
-    xkb_layout us
-    xkb_numlock enabled
-}
-
-# Corne: German layout, same as i3 (setxkbmap -device <corne> -layout de).
-# Sway identifiers are vendor:product:Name, spaces as underscores.
-input "1d50:615e:Timos_Corne_Keyboard" {
-    xkb_layout de
-}
+# Keyboard layout/device settings are host-specific (tptimo: US laptop +
+# German Corne, HOME-PC: German). They live in host.d/keyboard.conf — see
+# hosts/<name>/.config/sway/host.d/. Sway reads xkb directly; setxkbmap is
+# not needed. i3 does the equivalent in ~/.config/i3/set-keyboard-layouts.sh.
 
 # X11-only keymap settings (LightDM reads /etc/X11/Xkbmap and ~/.Xkbmap)
 # are not applied to a Wayland session. Re-apply them on start/reload so
@@ -148,7 +140,8 @@ set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
 
-# Host-specific display/workspace-output config lives in hosts/<name>/.config/sway/host.d/
+# Host-specific display/workspace-output/keyboard config lives in
+# hosts/<name>/.config/sway/host.d/
 # Empty globs are a no-op (sway silently skips missing matches).
 include ~/.config/sway/host.d/*.conf
 
