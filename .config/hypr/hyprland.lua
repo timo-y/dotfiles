@@ -140,7 +140,9 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("swaybg -m fill -i ~/.config/hypr/background.jpg")
 
     -- Screen lock (i3: xset s 3600 + xss-lock/i3lock — 1 hour idle).
-    hl.exec_cmd("swayidle -w timeout 3600 'swaylock -f' before-sleep 'swaylock -f'")
+    -- hyprlock is Hyprland-native: blurred screenshot + themed input field/clock
+    -- (see ~/.config/hypr/hyprlock.conf), unlike the plain swaylock fallback.
+    hl.exec_cmd("swayidle -w timeout 3600 'hyprlock' before-sleep 'hyprlock'")
 
     -- Applications, pinned to their workspaces like the i3 autostart block.
     -- NOTE: exec rules are validated *when the handler runs*, not by

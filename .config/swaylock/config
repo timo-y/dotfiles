@@ -1,0 +1,39 @@
+# swaylock theme — used by `swaylock -f` from the Hyprland swayidle line and
+# (optionally) the sway config.
+#
+# Without this file swaylock falls back to its defaults: plain solid grey,
+# default sans font and a bare ring indicator — hence the "oldschool" look.
+#
+# Colours match the i3/sway/Hyprland palette (background.jpg: #1C1B19).
+# Blur/screenshot effects need the `swaylock-effects` fork, not plain swaylock.
+
+# Solid backdrop (drop the image lines below if you prefer the wallpaper).
+color=1C1B19FF
+inside-color=1C1B19CC
+inside-clear-color=1C1B19CC
+inside-ver-color=1C1B19CC
+inside-wrong-color=1C1B19CC
+
+ring-color=2C78BF
+ring-clear-color=917E6B
+ring-ver-color=519F50
+ring-wrong-color=EF2F27
+
+key-hl-color=FBB829
+bs-hl-color=EF2F27
+separator-color=45433E
+line-color=00000000
+
+text-color=FCE8C3
+text-clear-color=FCE8C3
+text-ver-color=FCE8C3
+text-wrong-color=FCE8C3
+
+font=GeistMono Nerd Font 16
+show-failed-attempts
+indicator-caps-lock
+indicator-idle-visible
+
+clock
+timestr=%H:%M
+datestr=%A, %d %B
