@@ -1,8 +1,8 @@
 -- Hyprland configuration (Lua API, Hyprland >= 0.57).
 -- Mirrors ~/.config/i3/config; Wayland translations follow ~/.config/sway/config.
 --
--- NOTE: Hyprland 0.57+ no longer reads ~/.config/hypr/hyprland.conf. The legacy
--- file is kept in this repo only for Hyprland builds that still parse hyprlang.
+-- Hyprland 0.57 does not parse hyprland.conf at all (and parses any file it is
+-- handed as Lua), so this is the only config; there is no hyprlang mirror.
 
 local mod      = "SUPER"
 local terminal = "ghostty"
@@ -115,8 +115,14 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 
     -- i3: exec --no-startup-id dex --autostart --environment i3
-    -- dex is not installed by setup.sh; uncomment after installing it.
-    -- hl.exec_cmd("dex --autostart --environment hyprland")
+    --
+    -- Hyprland never reads XDG autostart entries on its own, so every app that
+    -- only ships a ~/.config/autostart/*.desktop file (1Password, Proton Mail
+    -- Bridge, gnome-keyring, caffeine, …) silently never starts without dex.
+    -- dex comes from nix (~/.nix-profile/bin) and a DM-launched Wayland session
+    -- does not source ~/.xprofile — the file that puts that directory on $PATH
+    -- for the i3 session — so prepend it here instead of relying on inheritance.
+    hl.exec_cmd("env PATH=\"$HOME/.nix-profile/bin:$PATH\" dex --autostart --environment Hyprland")
 
     -- Optional session startup hook (skip cleanly if it does not exist).
     hl.exec_cmd("[ -f ~/.desktop-session/startup ] && bash ~/.desktop-session/startup")
@@ -124,6 +130,10 @@ hl.on("hyprland.start", function()
     -- Bar (waybar stands in for i3bar/i3status-rs), notifications, tray.
     hl.exec_cmd("waybar")
     hl.exec_cmd("dunst")
+    -- `--indicator` (AppIndicator/SNI) is the only tray mode Waybar displays;
+    -- the bare `nm-applet` from /etc/xdg/autostart paints an XEmbed icon Waybar
+    -- cannot show, so that entry is masked by ~/.config/autostart/nm-applet.desktop
+    -- and this line stays the single owner of the applet.
     hl.exec_cmd("nm-applet --indicator")
 
     -- i3: exec_always feh --bg-fill ~/.config/hypr/background.jpg
@@ -133,11 +143,17 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("swayidle -w timeout 3600 'swaylock -f' before-sleep 'swaylock -f'")
 
     -- Applications, pinned to their workspaces like the i3 autostart block.
-    hl.exec_cmd(term("-e tmux"), { workspace = 1, silent = true })
-    hl.exec_cmd("brave",         { workspace = 3, silent = true })
-    hl.exec_cmd("discord",       { workspace = 4, silent = true })
-    hl.exec_cmd("betterbird",    { workspace = 5, silent = true })
-    hl.exec_cmd("caffeine")
+    -- NOTE: exec rules are validated *when the handler runs*, not by
+    -- `hyprland --verify-config` (which never fires hyprland.start). There is no
+    -- `silent` effect in the Lua exec-rule table (hyprlang's `[workspace 1 silent]`
+    -- keyword does not exist here); passing it throws and aborts the rest of this
+    -- callback, so later apps silently never start. Use `no_initial_focus`.
+    hl.exec_cmd(term("-e tmux"), { workspace = 1, no_initial_focus = true })
+    hl.exec_cmd("brave",         { workspace = 3, no_initial_focus = true })
+    hl.exec_cmd("discord",       { workspace = 4, no_initial_focus = true })
+    hl.exec_cmd("betterbird",    { workspace = 5, no_initial_focus = true })
+    -- caffeine is *not* started here: /etc/xdg/autostart/caffeine.desktop does
+    -- it through dex now. Starting both yields two daemons and two tray icons.
 
     -- Return to workspace 3 after startup (i3: i3-msg 'workspace 3').
     hl.timer(function()

@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=NetworkManager Applet (masked)
+Comment=Masked so dex does not start a second, XEmbed-only nm-applet. The tray applet is started from the session config with --indicator (SNI), which is the mode Waybar/i3bar under Wayland can display.
+Hidden=true
