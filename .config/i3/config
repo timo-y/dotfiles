@@ -312,3 +312,4 @@ exec --no-startup-id sleep 4 && exec 'discord'
 exec --no-startup-id i3-msg 'workspace 3'
 
 exec --no-startup-id dunst
+exec --no-startup-id 'redshift -l 52.52:13.40'

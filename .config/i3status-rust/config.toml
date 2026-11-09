@@ -103,3 +103,16 @@ format = " $icon  $text "
 block = "battery"
 format = " $icon $percentage {$time_remaining.dur(hms:true, min_unit:m) |}"
 
+[[block]]
+block = "hueshift"
+hue_shifter = "redshift"
+step = 100
+click_temp = 6500
+
+[[block]]
+block = "custom"
+command = "echo '☀'"
+interval = "once"
+[[block.click]]
+button = "left"
+cmd = "redshift -x"

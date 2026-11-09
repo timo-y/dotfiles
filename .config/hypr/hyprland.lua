@@ -68,7 +68,7 @@ hl.config({
     },
 
     input = {
-        kb_layout  = "de",
+        kb_layout  = "us", -- i3: US default on this laptop (tptimo)
         kb_variant = "",
         kb_model   = "",
         kb_options = "",

@@ -36,9 +36,10 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +10%
 bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 10%-
 
-# Keyboard layout (German). Sway reads xkb directly; no setxkbmap needed.
+# Keyboard layout (US on this laptop). Sway reads xkb directly; no setxkbmap
+# needed. i3 does the same in ~/.config/i3/set-keyboard-layouts.sh.
 input "type:keyboard" {
-    xkb_layout de
+    xkb_layout us
     xkb_numlock enabled
 }
 
