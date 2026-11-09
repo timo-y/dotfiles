@@ -147,6 +147,9 @@ fi
 ## zsh-autosuggestions
 bindkey '^ ' autosuggest-accept
 
+## Audio fix
+alias fix-audio="rm -rf ~/.local/state/wireplumber && systemctl --user restart wireplumber"
+
 #          ╭──────────────────────────────────────────────────────────╮
 #          │                        SSH AGENT                         │
 #          ╰──────────────────────────────────────────────────────────╯
@@ -174,3 +177,4 @@ else
 fi
 
 if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+eval "$(~/.local/bin/mise activate zsh)"
