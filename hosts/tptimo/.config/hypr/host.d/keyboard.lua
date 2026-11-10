@@ -2,12 +2,15 @@
 -- i3 mirrors this in ~/.config/i3/set-keyboard-layouts.sh.
 
 -- Laptop keyboard: US layout. numlock_by_default is set in the base config.
+-- Right Ctrl is Compose (i3: setxkbmap -option compose:rctrl): tap it, then
+-- " + a → ä, ' + a → á, s + s → ß, etc. The Corne inherits the option and
+-- keeps RAlt as AltGr.
 hl.config({
     input = {
         kb_layout  = "us",
         kb_variant = "",
         kb_model   = "",
-        kb_options = "",
+        kb_options = "compose:rctrl",
         kb_rules   = "",
     },
 })
