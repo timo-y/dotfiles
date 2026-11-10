@@ -1,5 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import json
+import sys
 import requests
 from datetime import datetime
 
@@ -56,7 +57,20 @@ WEATHER_CODES = {
 
 data = {}
 # Changed to Berlin and metric units (Celsius)
-weather = requests.get("https://wttr.in/Berlin?format=j1&lang=en&m").json()
+try:
+    weather = requests.get(
+        "https://wttr.in/Berlin?format=j1&lang=en&m", timeout=10
+    ).json()
+except Exception as err:
+    # Valid JSON so waybar keeps the module; the message ends up in the log.
+    print(json.dumps({}), file=sys.stdout)
+    print(f"waybar-wttr: {err}", file=sys.stderr)
+    raise SystemExit(0)
+
+
+def icon(code):
+    # wttr.in sometimes returns codes that are not in the WWO set.
+    return WEATHER_CODES.get(code, "")
 
 
 def format_time(time):
@@ -94,7 +108,7 @@ if tempint > 0 and tempint < 10:
 # Changed all temperature fields to Celsius versions
 data["text"] = (
     " "
-    + WEATHER_CODES[weather["current_condition"][0]["weatherCode"]]
+    + icon(weather["current_condition"][0]["weatherCode"])
     + " "
     + extrachar
     + weather["current_condition"][0]["FeelsLikeC"]
@@ -124,7 +138,7 @@ for i, day in enumerate(weather["weather"]):
             if int(format_time(hour["time"])) < datetime.now().hour - 2:
                 continue
         data["tooltip"] += (
-            f"{format_time(hour['time'])} {WEATHER_CODES[hour['weatherCode']]} {format_temp(hour['FeelsLikeC'])} {hour['weatherDesc'][0]['value']}, {format_chances(hour)}\n"
+            f"{format_time(hour['time'])} {icon(hour['weatherCode'])} {format_temp(hour['FeelsLikeC'])} {hour['weatherDesc'][0]['value']}, {format_chances(hour)}\n"
         )
 
 print(json.dumps(data))
