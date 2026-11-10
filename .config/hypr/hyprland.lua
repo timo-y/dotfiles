@@ -6,6 +6,9 @@
 
 local mod      = "SUPER"
 local terminal = "ghostty"
+-- NOTE: wofi populates its list one entry per main-loop iteration, so right
+-- after opening, entries far down $PATH (~/.nix-profile, /usr/bin, ...) are
+-- not yet in the list. Typing + Enter still works thanks to --exec-search.
 -- Ghostty's GTK4 Wayland IM can drop dead-key compose sequences (^, `); force
 -- the simple compose-table IM. Same workaround as the sway config/`~/.xprofile`.
 local function term(args)
@@ -172,8 +175,14 @@ hl.bind(mod .. " + SHIFT + Q", hl.dsp.window.close())
 
 -- ── Program launcher (i3: dmenu_run; dmenu is X11-only, so wofi is the
 -- Wayland equivalent — same run/drun split as the sway config) ─────────────
-hl.bind(mod .. " + D", hl.dsp.exec_cmd("wofi --show run --define run-always_parse_args=true --exec-search"))
-hl.bind(mod .. " + SHIFT + D", hl.dsp.exec_cmd("wofi --show drun"))
+-- run mode = every executable in $PATH (bare names), drun = .desktop apps.
+-- --insensitive: wofi matches case-sensitively by default, so "heroic" would
+-- never match "Heroic Games Launcher" in drun and "Heroic" in run.
+-- --exec-search: Enter runs exactly what was typed (even if nothing matched)
+-- instead of whatever entry happens to be highlighted (the recents cache in
+-- ~/.cache/wofi-run is listed first, so that was usually "the last one").
+hl.bind(mod .. " + D", hl.dsp.exec_cmd("wofi --show run --insensitive --define run-always_parse_args=true --exec-search"))
+hl.bind(mod .. " + SHIFT + D", hl.dsp.exec_cmd("wofi --show drun --insensitive"))
 
 -- ── Focus (vim keys) ───────────────────────────────────────────────────────
 hl.bind(mod .. " + H", hl.dsp.focus({ direction = "left" }))

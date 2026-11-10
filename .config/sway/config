@@ -75,9 +75,10 @@ bindsym $mod+Shift+q kill
 # i3-style command runner (dmenu_run equivalent).
 # run mode lists $PATH executables, but --exec-search lets you press Enter on
 # arbitrary typed input, and run-always_parse_args handles "shutdown now".
-bindsym $mod+d exec --no-startup-id wofi --show run --define run-always_parse_args=true --exec-search
+# --insensitive: wofi matches case-sensitively by default.
+bindsym $mod+d exec --no-startup-id wofi --show run --insensitive --define run-always_parse_args=true --exec-search
 # Keep a separate app launcher for .desktop entries.
-bindsym $mod+Shift+d exec --no-startup-id wofi --show drun
+bindsym $mod+Shift+d exec --no-startup-id wofi --show drun --insensitive
 
 # change focus
 bindsym $mod+h focus left
