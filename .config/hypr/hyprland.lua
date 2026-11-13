@@ -142,7 +142,15 @@ hl.on("hyprland.start", function()
     -- Screen lock (i3: xset s 3600 + xss-lock/i3lock — 1 hour idle).
     -- hyprlock is Hyprland-native: blurred screenshot + themed input field/clock
     -- (see ~/.config/hypr/hyprlock.conf), unlike the plain swaylock fallback.
-    hl.exec_cmd("swayidle -w timeout 3600 'hyprlock' before-sleep 'hyprlock'")
+    --
+    -- Locking is owned by hypridle alone (idle timeout + `before_sleep_cmd` for
+    -- the lid switch, see ~/.config/hypr/hypridle.conf). Do NOT also start
+    -- swayidle: two daemons reacting to the same logind PrepareForSleep spawn
+    -- two hyprlock instances, and hyprlock has no single-instance check — the
+    -- symptom is two stacked lock screens after closing and reopening the lid.
+    -- The pidof guard keeps this harmless if hypridle.service (shipped with the
+    -- package) is enabled too; lock_cmd in hypridle.conf guards the lock itself.
+    hl.exec_cmd("pidof hypridle >/dev/null || hypridle")
 
     -- Applications, pinned to their workspaces like the i3 autostart block.
     -- NOTE: exec rules are validated *when the handler runs*, not by

@@ -19,8 +19,9 @@ font pango:GeistMono Nerd Font 10
 # dex comes from nix; ~/.xprofile is X11-only, so PATH is set explicitly here.
 exec --no-startup-id env PATH="$HOME/.nix-profile/bin:$PATH" dex --autostart --environment sway
 
-# Screen locking/idling is handled by swayidle on Wayland (not xss-lock/i3lock).
-# swayidle is not installed by setup.sh; uncomment after installing it.
+# Screen locking/idling is handled by swayidle on sway (not xss-lock/i3lock).
+# The Hyprland session uses hypridle + hyprlock instead; never run both daemons
+# in one session (see ~/.config/hypr/hypridle.conf).
 # exec --no-startup-id swayidle -w timeout 3600 'swaylock -f' before-sleep 'swaylock -f'
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,

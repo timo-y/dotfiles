@@ -1,5 +1,5 @@
-# swaylock theme — used by `swaylock -f` from the Hyprland swayidle line and
-# (optionally) the sway config.
+# swaylock theme — used by `swaylock -f` from the sway config (the Hyprland
+# session uses hyprlock/hypridle instead).
 #
 # Without this file swaylock falls back to its defaults: plain solid grey,
 # default sans font and a bare ring indicator — hence the "oldschool" look.

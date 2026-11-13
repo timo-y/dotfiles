@@ -91,9 +91,9 @@ declare -a CORE_PACKAGES_FEDORA=("xz")
 # Desktop deps that need hardware access or system daemons (pactl/libpulse,
 # X-session helpers, NM tray, wayland session lock, polkit agent) belong here.
 # Pure user-space tools (dex, dmenu, feh, flameshot, pavucontrol, libnotify,
-# swaybg, swayidle) live in timosDesktopPackages in config.nix instead.
+# swaybg) live in timosDesktopPackages in config.nix instead.
 declare -a DESKTOP_PACKAGES=("ghostty" "curl" "xdg-utils" "i3lock" "xss-lock" "swaylock")
-declare -a DESKTOP_PACKAGES_ARCH=("libpulse" "network-manager-applet" "polkit-gnome" "dunst")
+declare -a DESKTOP_PACKAGES_ARCH=("libpulse" "network-manager-applet" "polkit-gnome" "dunst" "hyprlock" "hypridle")
 declare -a DESKTOP_PACKAGES_DEBIAN=("pulseaudio-utils" "network-manager-gnome" "policykit-1-gnome")
 declare -a DESKTOP_PACKAGES_FEDORA=("pulseaudio-utils" "NetworkManager-applet" "polkit-gnome")
 
