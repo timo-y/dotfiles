@@ -184,9 +184,12 @@ echo "Base dotfiles installed."
 
 # ── Host overlay ──────────────────────────────────────────────────────
 # Each hosts/<name>/ is a separate stow package layered on top of the base.
-# Used for machine-specific config (monitor/display layout, keyboard layouts).
+# Used for machine-specific config (monitor/display layout, keyboard layouts,
+# audio devices, waybar bar layout).
 # Base configs (i3, sway) include from host.d/*.conf and the Hyprland Lua
-# config loads host.d/display.lua + host.d/keyboard.lua if present, so a
+# config loads host.d/display.lua + host.d/keyboard.lua + host.d/audio.lua if
+# present; waybar picks up host.jsonc instead of config.jsonc when one exists,
+# so a
 # missing overlay is a no-op — safe for any machine without a matching
 # hosts/<name>/ dir.
 if [ -d "hosts/$HOST_NAME" ]; then

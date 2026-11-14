@@ -28,13 +28,16 @@ chmod +x setup.sh
 After completion, restart your shell or run `source ~/.zshrc`.
 
 #### Host overlays
-Machine-specific config (monitor/display layout, keyboard layouts, workspace
-pinning, etc.) lives in `hosts/<hostname>/` and is stowed as a **separate**
-package. The base configs contain no host-specific display or keyboard
+Machine-specific config (monitor/display layout, keyboard layouts, audio
+devices, etc.) lives in `hosts/<hostname>/` and is stowed as a **separate**
+package. The base configs contain no host-specific display, keyboard or audio
 settings: the window managers include `~/.config/<wm>/host.d/*.conf` (i3,
-sway) and the Hyprland Lua config loads `host.d/display.lua` and
-`host.d/keyboard.lua` if present. Missing overlays are a no-op, so a new
-machine works with the base package alone. If you stow
+sway) and the Hyprland Lua config loads `host.d/display.lua`,
+`host.d/keyboard.lua` and `host.d/audio.lua` if present. Waybar likewise runs
+with `~/.config/waybar/host.jsonc` when an overlay provides one — a full config
+that `include`s the shared `config.jsonc` and repeats only the keys that differ
+(e.g. `modules-right` without modules for hardware the machine lacks). Missing
+overlays are a no-op, so a new machine works with the base package alone. If you stow
 manually, install both the base package and the overlay, and use
 `--no-folding` so the overlay can merge into `~/.config`:
 
@@ -51,7 +54,8 @@ install, remove that symlink first; otherwise stow will refuse to add
 
 Current overlays:
 - `hosts/tptimo/`: laptop — US keyboard (German Corne), no display overrides.
-- `hosts/HOME-PC/`: desktop — German keyboard and dual-monitor layout.
+- `hosts/HOME-PC/`: desktop — German keyboard, dual-monitor layout, audio
+device switching and a bar layout without bluetooth/backlight.
 
 ### Devpod
 

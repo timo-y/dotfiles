@@ -1,0 +1,18 @@
+// HOME-PC bar layout: the desktop has no bluetooth adapter and no backlight,
+// so those modules are left out. Everything else comes from the shared config
+// in ~/.config/waybar/config.jsonc — the including file wins on duplicate keys,
+// so only the keys that differ are repeated here.
+// (Waybar is started as `waybar -c host.jsonc` when this file exists; see the
+// autostart section of ~/.config/hypr/hyprland.lua.)
+{
+    "include": ["config.jsonc"],
+    "modules-right": [
+        "network",
+        "temperature",
+        "custom/power_profile",
+        "battery",
+        "pulseaudio",
+        "pulseaudio#microphone",
+        "tray"
+    ]
+}

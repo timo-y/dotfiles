@@ -138,7 +138,10 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("[ -f ~/.desktop-session/startup ] && bash ~/.desktop-session/startup")
 
     -- Bar (waybar stands in for i3bar/i3status-rs), notifications, tray.
-    hl.exec_cmd("waybar")
+    -- A host overlay may ship ~/.config/waybar/host.jsonc (a full config that
+    -- includes the shared config.jsonc) to drop modules for hardware the
+    -- machine does not have, e.g. bluetooth/backlight on the desktop.
+    hl.exec_cmd("[ -f ~/.config/waybar/host.jsonc ] && exec waybar -c ~/.config/waybar/host.jsonc || exec waybar")
     hl.exec_cmd("dunst")
     -- `--indicator` (AppIndicator/SNI) is the only tray mode Waybar displays;
     -- the bare `nm-applet` from /etc/xdg/autostart paints an XEmbed icon Waybar
@@ -289,10 +292,6 @@ hl.bind("CTRL + SHIFT + SPACE", hl.dsp.exec_cmd("1password --quick-access"))
 -- ── Screenshots ────────────────────────────────────────────────────────────
 hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd("flameshot gui"))
 
--- ── Audio device switching ─────────────────────────────────────────────────
-hl.bind(mod .. " + CTRL + N", hl.dsp.exec_cmd("pactl set-default-sink $(pactl list short sinks | grep -i 'usb' | head -n1 | cut -f2) && notify-send 'Audio' 'Switched to Headset'"))
-hl.bind(mod .. " + CTRL + S", hl.dsp.exec_cmd("pactl set-default-sink $(pactl list short sinks | grep -i 'umc404hd' | head -n1 | cut -f2) && notify-send 'Audio' 'Switched to UMC404HD'"))
-
 -- ── Prefer dark/light ──────────────────────────────────────────────────────
 hl.bind(mod .. " + SHIFT + B", hl.dsp.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'"))
 hl.bind(mod .. " + SHIFT + M", hl.dsp.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'"))
@@ -320,13 +319,13 @@ end)
 hl.bind(mod .. " + R", hl.dsp.submap("window_movements"))
 
 -- ── Host overlay ───────────────────────────────────────────────────────────
--- Host-specific monitor/workspace layout and keyboard layout live in
--- hosts/<name>/.config/hypr/host.d/. Each file is optional; a machine without
--- that overlay simply skips it (same no-op contract as the
+-- Host-specific monitor/workspace layout, keyboard layout and audio devices
+-- live in hosts/<name>/.config/hypr/host.d/. Each file is optional; a machine
+-- without that overlay simply skips it (same no-op contract as the
 -- `include host.d/*.conf` lines in the i3/sway configs). Loaded last so the
 -- host can override base settings such as the keyboard layout.
 local overlay_dir = os.getenv("HOME") .. "/.config/hypr/host.d"
-for _, name in ipairs({ "display.lua", "keyboard.lua" }) do
+for _, name in ipairs({ "display.lua", "keyboard.lua", "audio.lua" }) do
     local path = overlay_dir .. "/" .. name
     local overlay_fh = io.open(path, "r")
     if overlay_fh then

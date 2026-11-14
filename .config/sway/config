@@ -232,7 +232,9 @@ bindsym $mod+a exec "pavucontrol"
 bindsym $mod+Shift+s exec "flameshot gui"
 
 # Audio device switching
-bindsym $mod+Ctrl+n exec "pactl set-default-sink $(pactl list short sinks | grep -i 'usb' | head -n1 | cut -f2) && notify-send 'Audio' 'Switched to Headset'"
+# Match the headset by name: 'usb' also matches the UMC404HD
+# ('usb-BEHRINGER_UMC404HD...'), which could make this bind a no-op.
+bindsym $mod+Ctrl+n exec "pactl set-default-sink $(pactl list short sinks | grep -i 'generalplus' | head -n1 | cut -f2) && notify-send 'Audio' 'Switched to Headset'"
 bindsym $mod+Ctrl+s exec "pactl set-default-sink $(pactl list short sinks | grep -i 'umc404hd' | head -n1 | cut -f2) && notify-send 'Audio' 'Switched to UMC404HD'"
 
 # Prefer dark/light
