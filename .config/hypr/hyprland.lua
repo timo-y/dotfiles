@@ -145,7 +145,15 @@ hl.on("hyprland.start", function()
     -- Screen lock (i3: xset s 3600 + xss-lock/i3lock — 1 hour idle).
     -- hyprlock is Hyprland-native: blurred screenshot + themed input field/clock
     -- (see ~/.config/hypr/hyprlock.conf), unlike the plain swaylock fallback.
-    hl.exec_cmd("swayidle -w timeout 3600 'hyprlock' before-sleep 'hyprlock'")
+    --
+    -- Locking is owned by hypridle alone (idle timeout + `before_sleep_cmd` for
+    -- the lid switch, see ~/.config/hypr/hypridle.conf). Do NOT also start
+    -- swayidle: two daemons reacting to the same logind PrepareForSleep spawn
+    -- two hyprlock instances, and hyprlock has no single-instance check — the
+    -- symptom is two stacked lock screens after closing and reopening the lid.
+    -- The pidof guard keeps this harmless if hypridle.service (shipped with the
+    -- package) is enabled too; lock_cmd in hypridle.conf guards the lock itself.
+    hl.exec_cmd("pidof hypridle >/dev/null || hypridle")
 
     -- Applications, pinned to their workspaces like the i3 autostart block.
     -- NOTE: exec rules are validated *when the handler runs*, not by
@@ -263,6 +271,13 @@ hl.bind(mod .. " + B", hl.dsp.exec_cmd("brave"))
 hl.bind(mod .. " + N", hl.dsp.exec_cmd("upnote"))
 hl.bind(mod .. " + M", hl.dsp.exec_cmd("betterbird"))
 hl.bind(mod .. " + A", hl.dsp.exec_cmd("pavucontrol"))
+
+-- 1Password Quick Access. Wayland has no global key grab for background apps
+-- (X11's XGrabKey does not exist; only the GlobalShortcuts portal does, and
+-- 1Password does not use it — see the app.asar switch list), so the shortcut
+-- must be registered here. `--quick-access` also starts the app if needed and
+-- is the same entry point the in-app "Quick Access" shortcut uses.
+hl.bind("CTRL + SHIFT + SPACE", hl.dsp.exec_cmd("1password --quick-access"))
 
 -- ── Screenshots ────────────────────────────────────────────────────────────
 hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd("flameshot gui"))

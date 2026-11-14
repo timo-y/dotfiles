@@ -42,7 +42,9 @@
         pavucontrol    # PA mixer GUI (sound block click + $mod+A)
         libnotify      # `notify-send` (audio sink switch binds)
         swaybg         # wayland wallpaper (hypr exec-once)
-        swayidle       # wayland idle daemon (hypr exec-once)
+        # hyprlock/hypridle come from the distro packages, not nix: hypridle's
+        # systemd user unit and the Hyprland >= 0.57 Lua dispatchers it calls
+        # are tied to the distro build (see DESKTOP_PACKAGES_ARCH in setup.sh).
       ];
     };
   };
