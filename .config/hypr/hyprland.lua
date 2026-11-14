@@ -4,7 +4,7 @@
 -- Hyprland 0.57 does not parse hyprland.conf at all (and parses any file it is
 -- handed as Lua), so this is the only config; there is no hyprlang mirror.
 
-local mod      = "SUPER"
+local mod = "SUPER"
 local terminal = "ghostty"
 -- NOTE: wofi populates its list one entry per main-loop iteration, so right
 -- after opening, entries far down $PATH (~/.nix-profile, /usr/bin, ...) are
@@ -12,7 +12,7 @@ local terminal = "ghostty"
 -- Ghostty's GTK4 Wayland IM can drop dead-key compose sequences (^, `); force
 -- the simple compose-table IM. Same workaround as the sway config/`~/.xprofile`.
 local function term(args)
-    return "env GTK_IM_MODULE=gtk-im-context-simple " .. terminal .. " " .. args
+	return "env GTK_IM_MODULE=gtk-im-context-simple " .. terminal .. " " .. args
 end
 
 -- Numpad keycodes (XKB / `xev` codes = evdev + 8), in KP_1..KP_9, KP_0 order.
@@ -27,64 +27,64 @@ local numpad_codes = { 87, 88, 89, 83, 84, 85, 79, 80, 81, 90 }
 
 -- ── Look and feel (i3: border pixel 1, small gaps, rounded corners) ─────────
 hl.config({
-    general = {
-        gaps_in     = 2,
-        gaps_out    = 4,
-        border_size = 1,                     -- i3: for_window [class=".*"] border pixel 1
+	general = {
+		gaps_in = 2,
+		gaps_out = 4,
+		border_size = 1, -- i3: for_window [class=".*"] border pixel 1
 
-        col = {
-            active_border   = "rgb(2C78BF)", -- i3: client.focused child_border
-            inactive_border = "rgb(3B3935)", -- i3: client.unfocused border
-        },
+		col = {
+			active_border = "rgb(2C78BF)", -- i3: client.focused child_border
+			inactive_border = "rgb(3B3935)", -- i3: client.unfocused border
+		},
 
-        resize_on_border = true,
-        layout           = "dwindle",
-    },
+		resize_on_border = true,
+		layout = "dwindle",
+	},
 
-    decoration = {
-        rounding = 8,
-        blur     = {
-            enabled = true,
-            size    = 3, -- small radius, keeps text behind readable
-            passes  = 2,
-        },
-        shadow   = { enabled = false },
+	decoration = {
+		rounding = 8,
+		blur = {
+			enabled = true,
+			size = 3, -- small radius, keeps text behind readable
+			passes = 2,
+		},
+		shadow = { enabled = false },
 
-        -- Only unfocused windows are translucent so the blur shows through.
-        inactive_opacity = 0.95,
-    },
+		-- Only unfocused windows are translucent so the blur shows through.
+		inactive_opacity = 0.95,
+	},
 
-    -- i3 has no animations; set enabled = false for a snappier, i3-like feel.
-    animations = { enabled = true },
+	-- i3 has no animations; set enabled = false for a snappier, i3-like feel.
+	animations = { enabled = true },
 
-    -- Keeps the split direction sticky, like an i3 container split.
-    dwindle = { preserve_split = true },
+	-- Keeps the split direction sticky, like an i3 container split.
+	dwindle = { preserve_split = true },
 
-    misc = {
-        disable_hyprland_logo   = true,
-        disable_splash_rendering = true,
-        mouse_move_enables_dpms = true,
-        key_press_enables_dpms  = true,
-    },
+	misc = {
+		disable_hyprland_logo = true,
+		disable_splash_rendering = true,
+		mouse_move_enables_dpms = true,
+		key_press_enables_dpms = true,
+	},
 
-    input = {
-        -- Keyboard layout is host-specific (tptimo: US laptop + German Corne,
-        -- HOME-PC: German). See host.d/keyboard.lua in the host overlay.
+	input = {
+		-- Keyboard layout is host-specific (tptimo: US laptop + German Corne,
+		-- HOME-PC: German). See host.d/keyboard.lua in the host overlay.
 
-        -- i3 reaches the numpad with Mod4+mod2 (Num Lock on); mirror that.
-        numlock_by_default = true,
-        -- NOT i3's focus_follows_mouse=no: with follow_mouse = 0 Hyprland never
-        -- hands pointer focus to a window that isn't focused, so the wheel
-        -- (and hover) go to the focused window only. 2 (loose) keeps the i3
-        -- feel of not refocusing on every twitch but lets a hovered window
-        -- receive the scroll. Use 1 for "focus on every mouse move".
-        follow_mouse       = 2,
-        -- Only refocus when the cursor actually crosses into another window.
-        mouse_refocus      = false,
+		-- i3 reaches the numpad with Mod4+mod2 (Num Lock on); mirror that.
+		numlock_by_default = true,
+		-- NOT i3's focus_follows_mouse=no: with follow_mouse = 0 Hyprland never
+		-- hands pointer focus to a window that isn't focused, so the wheel
+		-- (and hover) go to the focused window only. 2 (loose) keeps the i3
+		-- feel of not refocusing on every twitch but lets a hovered window
+		-- receive the scroll. Use 1 for "focus on every mouse move".
+		follow_mouse = 2,
+		-- Only refocus when the cursor actually crosses into another window.
+		mouse_refocus = false,
 
-        sensitivity = 0,
-        touchpad    = { natural_scroll = false },
-    },
+		sensitivity = 0,
+		touchpad = { natural_scroll = false },
+	},
 })
 
 -- ── Animations ──────────────────────────────────────────────────────────────
@@ -92,100 +92,100 @@ hl.config({
 -- is a duration, not a rate: duration = speed * 100 ms (lower = snappier).
 hl.curve("quick", { type = "bezier", points = { { 0.15, 0 }, { 0.1, 1 } } })
 
-hl.animation({ leaf = "global",     enabled = true, speed = 1,   bezier = "quick" })
-hl.animation({ leaf = "windows",    enabled = true, speed = 1.8, bezier = "quick" })
-hl.animation({ leaf = "windowsIn",  enabled = true, speed = 1.8, bezier = "quick", style = "popin 90%" })
+hl.animation({ leaf = "global", enabled = true, speed = 1, bezier = "quick" })
+hl.animation({ leaf = "windows", enabled = true, speed = 1.8, bezier = "quick" })
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 1.8, bezier = "quick", style = "popin 90%" })
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.5, bezier = "quick", style = "popin 90%" })
-hl.animation({ leaf = "fade",       enabled = true, speed = 1.5, bezier = "quick" })
-hl.animation({ leaf = "layers",     enabled = true, speed = 1.8, bezier = "quick" })
+hl.animation({ leaf = "fade", enabled = true, speed = 1.5, bezier = "quick" })
+hl.animation({ leaf = "layers", enabled = true, speed = 1.8, bezier = "quick" })
 hl.animation({ leaf = "workspaces", enabled = true, speed = 1.5, bezier = "quick" })
 
 -- i3: new_float none — no border on floating windows.
 hl.window_rule({
-    name        = "no-border-floating",
-    match       = { float = true },
-    border_size = 0,
+	name = "no-border-floating",
+	match = { float = true },
+	border_size = 0,
 })
 
 -- ── Window rules (i3: assign [class="..."]) ────────────────────────────────
-hl.window_rule({ name = "ws3-browser", match = { class = ".*(brave|thorium).*" },        workspace = "3" })
-hl.window_rule({ name = "ws4-discord", match = { class = ".*discord.*" },                workspace = "4" })
+hl.window_rule({ name = "ws3-browser", match = { class = ".*(brave|thorium).*" }, workspace = "3" })
+hl.window_rule({ name = "ws4-discord", match = { class = ".*discord.*" }, workspace = "4" })
 -- hl.window_rule({ name = "ws5-upnote", match = { class = ".*upnote.*" },               workspace = "5" })
-hl.window_rule({ name = "ws5-mail",    match = { class = ".*(thunderbird|betterbird|mail).*" }, workspace = "5" })
-hl.window_rule({ name = "ws6-games",   match = { class = ".*(heroic|steam).*" },         workspace = "6" })
+hl.window_rule({ name = "ws5-mail", match = { class = ".*(thunderbird|betterbird|mail).*" }, workspace = "5" })
+hl.window_rule({ name = "ws6-games", match = { class = ".*(heroic|steam).*" }, workspace = "6" })
 
 -- ── Autostart ──────────────────────────────────────────────────────────────
 hl.on("hyprland.start", function()
-    -- Portals / session environment
-    hl.exec_cmd("~/.config/hypr/xdg-portal-hyprland")
-    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
-    hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP DISPLAY XAUTHORITY")
-    hl.exec_cmd("systemctl --user import-environment XDG_SESSION_TYPE XDG_SESSION_CLASS")
-    hl.exec_cmd("dbus-update-activation-environment --systemd --all")
-    hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+	-- Portals / session environment
+	hl.exec_cmd("~/.config/hypr/xdg-portal-hyprland")
+	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+	hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP DISPLAY XAUTHORITY")
+	hl.exec_cmd("systemctl --user import-environment XDG_SESSION_TYPE XDG_SESSION_CLASS")
+	hl.exec_cmd("dbus-update-activation-environment --systemd --all")
+	hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 
-    -- i3: exec --no-startup-id dex --autostart --environment i3
-    --
-    -- Hyprland never reads XDG autostart entries on its own, so every app that
-    -- only ships a ~/.config/autostart/*.desktop file (1Password, Proton Mail
-    -- Bridge, gnome-keyring, caffeine, …) silently never starts without dex.
-    -- dex comes from nix (~/.nix-profile/bin) and a DM-launched Wayland session
-    -- does not source ~/.xprofile — the file that puts that directory on $PATH
-    -- for the i3 session — so prepend it here instead of relying on inheritance.
-    hl.exec_cmd("env PATH=\"$HOME/.nix-profile/bin:$PATH\" dex --autostart --environment Hyprland")
+	-- i3: exec --no-startup-id dex --autostart --environment i3
+	--
+	-- Hyprland never reads XDG autostart entries on its own, so every app that
+	-- only ships a ~/.config/autostart/*.desktop file (1Password, Proton Mail
+	-- Bridge, gnome-keyring, caffeine, …) silently never starts without dex.
+	-- dex comes from nix (~/.nix-profile/bin) and a DM-launched Wayland session
+	-- does not source ~/.xprofile — the file that puts that directory on $PATH
+	-- for the i3 session — so prepend it here instead of relying on inheritance.
+	hl.exec_cmd('env PATH="$HOME/.nix-profile/bin:$PATH" dex --autostart --environment Hyprland')
 
-    -- Optional session startup hook (skip cleanly if it does not exist).
-    hl.exec_cmd("[ -f ~/.desktop-session/startup ] && bash ~/.desktop-session/startup")
+	-- Optional session startup hook (skip cleanly if it does not exist).
+	hl.exec_cmd("[ -f ~/.desktop-session/startup ] && bash ~/.desktop-session/startup")
 
-    -- Bar (waybar stands in for i3bar/i3status-rs), notifications, tray.
-    -- A host overlay may ship ~/.config/waybar/host.jsonc (a full config that
-    -- includes the shared config.jsonc) to drop modules for hardware the
-    -- machine does not have, e.g. bluetooth/backlight on the desktop.
-    hl.exec_cmd("[ -f ~/.config/waybar/host.jsonc ] && exec waybar -c ~/.config/waybar/host.jsonc || exec waybar")
-    hl.exec_cmd("dunst")
-    -- `--indicator` (AppIndicator/SNI) is the only tray mode Waybar displays;
-    -- the bare `nm-applet` from /etc/xdg/autostart paints an XEmbed icon Waybar
-    -- cannot show, so that entry is masked by ~/.config/autostart/nm-applet.desktop
-    -- and this line stays the single owner of the applet.
-    hl.exec_cmd("nm-applet --indicator")
+	-- Bar (waybar stands in for i3bar/i3status-rs), notifications, tray.
+	-- A host overlay may ship ~/.config/waybar/host.jsonc (a full config that
+	-- includes the shared config.jsonc) to drop modules for hardware the
+	-- machine does not have, e.g. bluetooth/backlight on the desktop.
+	hl.exec_cmd("[ -f ~/.config/waybar/host.jsonc ] && exec waybar -c ~/.config/waybar/host.jsonc || exec waybar")
+	hl.exec_cmd("dunst")
+	-- `--indicator` (AppIndicator/SNI) is the only tray mode Waybar displays;
+	-- the bare `nm-applet` from /etc/xdg/autostart paints an XEmbed icon Waybar
+	-- cannot show, so that entry is masked by ~/.config/autostart/nm-applet.desktop
+	-- and this line stays the single owner of the applet.
+	hl.exec_cmd("nm-applet --indicator")
 
-    -- i3: exec_always feh --bg-fill ~/.config/hypr/background.jpg
-    hl.exec_cmd("swaybg -m fill -i ~/.config/hypr/background.jpg")
+	-- i3: exec_always feh --bg-fill ~/.config/hypr/background.jpg
+	hl.exec_cmd("swaybg -m fill -i ~/.config/hypr/background.jpg")
 
-    -- Screen lock (i3: xset s 3600 + xss-lock/i3lock — 1 hour idle).
-    -- hyprlock is Hyprland-native: blurred screenshot + themed input field/clock
-    -- (see ~/.config/hypr/hyprlock.conf), unlike the plain swaylock fallback.
-    --
-    -- Locking is owned by hypridle alone (idle timeout + `before_sleep_cmd` for
-    -- the lid switch, see ~/.config/hypr/hypridle.conf). Do NOT also start
-    -- swayidle: two daemons reacting to the same logind PrepareForSleep spawn
-    -- two hyprlock instances, and hyprlock has no single-instance check — the
-    -- symptom is two stacked lock screens after closing and reopening the lid.
-    -- The pidof guard keeps this harmless if hypridle.service (shipped with the
-    -- package) is enabled too; lock_cmd in hypridle.conf guards the lock itself.
-    hl.exec_cmd("pidof hypridle >/dev/null || hypridle")
+	-- Screen lock (i3: xset s 3600 + xss-lock/i3lock — 1 hour idle).
+	-- hyprlock is Hyprland-native: blurred screenshot + themed input field/clock
+	-- (see ~/.config/hypr/hyprlock.conf), unlike the plain swaylock fallback.
+	--
+	-- Locking is owned by hypridle alone (idle timeout + `before_sleep_cmd` for
+	-- the lid switch, see ~/.config/hypr/hypridle.conf). Do NOT also start
+	-- swayidle: two daemons reacting to the same logind PrepareForSleep spawn
+	-- two hyprlock instances, and hyprlock has no single-instance check — the
+	-- symptom is two stacked lock screens after closing and reopening the lid.
+	-- The pidof guard keeps this harmless if hypridle.service (shipped with the
+	-- package) is enabled too; lock_cmd in hypridle.conf guards the lock itself.
+	hl.exec_cmd("pidof hypridle >/dev/null || hypridle")
 
-    -- Applications, pinned to their workspaces like the i3 autostart block.
-    -- NOTE: exec rules are validated *when the handler runs*, not by
-    -- `hyprland --verify-config` (which never fires hyprland.start). There is no
-    -- `silent` effect in the Lua exec-rule table (hyprlang's `[workspace 1 silent]`
-    -- keyword does not exist here); passing it throws and aborts the rest of this
-    -- callback, so later apps silently never start. Use `no_initial_focus`.
-    hl.exec_cmd(term("-e tmux"), { workspace = 1, no_initial_focus = true })
-    hl.exec_cmd("brave",         { workspace = 3, no_initial_focus = true })
-    hl.exec_cmd("discord",       { workspace = 4, no_initial_focus = true })
-    hl.exec_cmd("betterbird",    { workspace = 5, no_initial_focus = true })
-    -- caffeine is *not* started here: /etc/xdg/autostart/caffeine.desktop does
-    -- it through dex now. Starting both yields two daemons and two tray icons.
+	-- Applications, pinned to their workspaces like the i3 autostart block.
+	-- NOTE: exec rules are validated *when the handler runs*, not by
+	-- `hyprland --verify-config` (which never fires hyprland.start). There is no
+	-- `silent` effect in the Lua exec-rule table (hyprlang's `[workspace 1 silent]`
+	-- keyword does not exist here); passing it throws and aborts the rest of this
+	-- callback, so later apps silently never start. Use `no_initial_focus`.
+	hl.exec_cmd(term("-e tmux"), { workspace = 1, no_initial_focus = true })
+	hl.exec_cmd("brave", { workspace = 3, no_initial_focus = true })
+	hl.exec_cmd("discord", { workspace = 4, no_initial_focus = true })
+	hl.exec_cmd("sleep 10 && betterbird", { workspace = 5, no_initial_focus = true })
+	-- caffeine is *not* started here: /etc/xdg/autostart/caffeine.desktop does
+	-- it through dex now. Starting both yields two daemons and two tray icons.
 
-    -- Return to workspace 3 after startup (i3: i3-msg 'workspace 3').
-    hl.timer(function()
-        hl.dispatch(hl.dsp.focus({ workspace = 3 }))
-    end, { timeout = 4000, type = "oneshot" })
+	-- Return to workspace 3 after startup (i3: i3-msg 'workspace 3').
+	hl.timer(function()
+		hl.dispatch(hl.dsp.focus({ workspace = 3 }))
+	end, { timeout = 4000, type = "oneshot" })
 end)
 
 -- ── Terminal ───────────────────────────────────────────────────────────────
-hl.bind(mod .. " + Return",       hl.dsp.exec_cmd(term("-e tmux")))
+hl.bind(mod .. " + Return", hl.dsp.exec_cmd(term("-e tmux")))
 hl.bind(mod .. " + SHIFT + Return", hl.dsp.exec_cmd(term("-e nvim .")))
 
 -- ── Kill focused window ────────────────────────────────────────────────────
@@ -199,7 +199,10 @@ hl.bind(mod .. " + SHIFT + Q", hl.dsp.window.close())
 -- --exec-search: Enter runs exactly what was typed (even if nothing matched)
 -- instead of whatever entry happens to be highlighted (the recents cache in
 -- ~/.cache/wofi-run is listed first, so that was usually "the last one").
-hl.bind(mod .. " + D", hl.dsp.exec_cmd("wofi --show run --insensitive --define run-always_parse_args=true --exec-search"))
+hl.bind(
+	mod .. " + D",
+	hl.dsp.exec_cmd("wofi --show run --insensitive --define run-always_parse_args=true --exec-search")
+)
 hl.bind(mod .. " + SHIFT + D", hl.dsp.exec_cmd("wofi --show drun --insensitive"))
 
 -- ── Focus (vim keys) ───────────────────────────────────────────────────────
@@ -215,8 +218,8 @@ hl.bind(mod .. " + SHIFT + K", hl.dsp.window.move({ direction = "up" }))
 hl.bind(mod .. " + SHIFT + L", hl.dsp.window.move({ direction = "right" }))
 
 -- ── Layout (i3: $mod+x tabbed/stacking, $mod+v split toggle) ───────────────
-hl.bind(mod .. " + X",         hl.dsp.group.toggle())
-hl.bind(mod .. " + V",         hl.dsp.layout("togglesplit"))
+hl.bind(mod .. " + X", hl.dsp.group.toggle())
+hl.bind(mod .. " + V", hl.dsp.layout("togglesplit"))
 hl.bind(mod .. " + SHIFT + V", hl.dsp.layout("togglesplit"))
 -- i3's $mod+Shift+x (per-window border toggle) has no Hyprland equivalent:
 -- borders are a single global setting here.
@@ -224,7 +227,7 @@ hl.bind(mod .. " + SHIFT + V", hl.dsp.layout("togglesplit"))
 -- there is no tiling<->floating focus switch.
 
 -- ── Fullscreen / floating ──────────────────────────────────────────────────
-hl.bind(mod .. " + F",         hl.dsp.window.fullscreen({ action = "toggle" }))
+hl.bind(mod .. " + F", hl.dsp.window.fullscreen({ action = "toggle" }))
 hl.bind(mod .. " + SHIFT + F", hl.dsp.window.float({ action = "toggle" }))
 
 -- ── Reload / exit (i3: reload, restart, exit) ──────────────────────────────
@@ -234,46 +237,62 @@ hl.bind(mod .. " + SHIFT + E", hl.dsp.exit())
 
 -- ── Workspace switching / moving windows ───────────────────────────────────
 for i = 1, 10 do
-    local key = i % 10 -- workspace 10 lives on key 0
-    hl.bind(mod .. " + " .. key,         hl.dsp.focus({ workspace = i }))
-    hl.bind(mod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
+	local key = i % 10 -- workspace 10 lives on key 0
+	hl.bind(mod .. " + " .. key, hl.dsp.focus({ workspace = i }))
+	hl.bind(mod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
 end
 
 -- Numpad workspace switching, matching the sway config's bindcode numbers.
 for i, code in ipairs(numpad_codes) do
-    hl.bind(mod .. " + code:" .. code,                hl.dsp.focus({ workspace = i }))
-    hl.bind(mod .. " + SHIFT + code:" .. code,        hl.dsp.window.move({ workspace = i }))
+	hl.bind(mod .. " + code:" .. code, hl.dsp.focus({ workspace = i }))
+	hl.bind(mod .. " + SHIFT + code:" .. code, hl.dsp.window.move({ workspace = i }))
 
-    -- Num Lock on: Mod2 is part of the modmask.
-    hl.bind(mod .. " + MOD2 + code:" .. code,         hl.dsp.focus({ workspace = i }))
-    hl.bind(mod .. " + SHIFT + MOD2 + code:" .. code, hl.dsp.window.move({ workspace = i }))
+	-- Num Lock on: Mod2 is part of the modmask.
+	hl.bind(mod .. " + MOD2 + code:" .. code, hl.dsp.focus({ workspace = i }))
+	hl.bind(mod .. " + SHIFT + MOD2 + code:" .. code, hl.dsp.window.move({ workspace = i }))
 end
 
 -- i3: move workspace to output next (wrap around the monitor list).
 hl.bind(mod .. " + SHIFT + N", function()
-    local monitors = hl.get_monitors()
-    local current  = hl.get_active_monitor()
-    if not current or #monitors < 2 then
-        return
-    end
+	local monitors = hl.get_monitors()
+	local current = hl.get_active_monitor()
+	if not current or #monitors < 2 then
+		return
+	end
 
-    local index = 1
-    for i, monitor in ipairs(monitors) do
-        if monitor.id == current.id then
-            index = i
-        end
-    end
+	local index = 1
+	for i, monitor in ipairs(monitors) do
+		if monitor.id == current.id then
+			index = i
+		end
+	end
 
-    local target = monitors[(index % #monitors) + 1]
-    hl.dispatch(hl.dsp.workspace.move({ monitor = target.name }))
+	local target = monitors[(index % #monitors) + 1]
+	hl.dispatch(hl.dsp.workspace.move({ monitor = target.name }))
 end)
 
 -- ── Audio / brightness function keys (i3: pactl + brightnessctl) ───────────
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pactl set-sink-volume @DEFAULT_SINK@ +10%"), { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pactl set-sink-volume @DEFAULT_SINK@ -10%"), { locked = true, repeating = true })
-hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("pactl set-sink-mute @DEFAULT_SINK@ toggle"), { locked = true, repeating = true })
-hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("pactl set-source-mute @DEFAULT_SOURCE@ toggle"), { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd("brightnessctl set +10%"), { locked = true, repeating = true })
+hl.bind(
+	"XF86AudioRaiseVolume",
+	hl.dsp.exec_cmd("pactl set-sink-volume @DEFAULT_SINK@ +10%"),
+	{ locked = true, repeating = true }
+)
+hl.bind(
+	"XF86AudioLowerVolume",
+	hl.dsp.exec_cmd("pactl set-sink-volume @DEFAULT_SINK@ -10%"),
+	{ locked = true, repeating = true }
+)
+hl.bind(
+	"XF86AudioMute",
+	hl.dsp.exec_cmd("pactl set-sink-mute @DEFAULT_SINK@ toggle"),
+	{ locked = true, repeating = true }
+)
+hl.bind(
+	"XF86AudioMicMute",
+	hl.dsp.exec_cmd("pactl set-source-mute @DEFAULT_SOURCE@ toggle"),
+	{ locked = true, repeating = true }
+)
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl set +10%"), { locked = true, repeating = true })
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl set 10%-"), { locked = true, repeating = true })
 
 -- ── Application launchers ──────────────────────────────────────────────────
@@ -297,23 +316,23 @@ hl.bind(mod .. " + SHIFT + B", hl.dsp.exec_cmd("gsettings set org.gnome.desktop.
 hl.bind(mod .. " + SHIFT + M", hl.dsp.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'"))
 
 -- ── Mouse bindings (i3 leaves these commented out; kept for convenience) ───
-hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
+hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- ── window_movements submap (i3: mode "window_movements", $mod+r) ──────────
 hl.define_submap("window_movements", function()
-    hl.bind("H", hl.dsp.window.move({ direction = "left" }))
-    hl.bind("J", hl.dsp.window.move({ direction = "down" }))
-    hl.bind("K", hl.dsp.window.move({ direction = "up" }))
-    hl.bind("L", hl.dsp.window.move({ direction = "right" }))
+	hl.bind("H", hl.dsp.window.move({ direction = "left" }))
+	hl.bind("J", hl.dsp.window.move({ direction = "down" }))
+	hl.bind("K", hl.dsp.window.move({ direction = "up" }))
+	hl.bind("L", hl.dsp.window.move({ direction = "right" }))
 
-    for i, code in ipairs(numpad_codes) do
-        hl.bind("code:" .. code,        hl.dsp.window.move({ workspace = i }))
-        hl.bind("MOD2 + code:" .. code, hl.dsp.window.move({ workspace = i }))
-    end
+	for i, code in ipairs(numpad_codes) do
+		hl.bind("code:" .. code, hl.dsp.window.move({ workspace = i }))
+		hl.bind("MOD2 + code:" .. code, hl.dsp.window.move({ workspace = i }))
+	end
 
-    hl.bind("Return", hl.dsp.submap("reset"))
-    hl.bind("Escape", hl.dsp.submap("reset"))
+	hl.bind("Return", hl.dsp.submap("reset"))
+	hl.bind("Escape", hl.dsp.submap("reset"))
 end)
 
 hl.bind(mod .. " + R", hl.dsp.submap("window_movements"))
@@ -326,10 +345,10 @@ hl.bind(mod .. " + R", hl.dsp.submap("window_movements"))
 -- host can override base settings such as the keyboard layout.
 local overlay_dir = os.getenv("HOME") .. "/.config/hypr/host.d"
 for _, name in ipairs({ "display.lua", "keyboard.lua", "audio.lua" }) do
-    local path = overlay_dir .. "/" .. name
-    local overlay_fh = io.open(path, "r")
-    if overlay_fh then
-        overlay_fh:close()
-        dofile(path)
-    end
+	local path = overlay_dir .. "/" .. name
+	local overlay_fh = io.open(path, "r")
+	if overlay_fh then
+		overlay_fh:close()
+		dofile(path)
+	end
 end
