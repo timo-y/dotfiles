@@ -73,7 +73,14 @@ hl.config({
 
         -- i3 reaches the numpad with Mod4+mod2 (Num Lock on); mirror that.
         numlock_by_default = true,
-        follow_mouse       = 0, -- i3: focus_follows_mouse no
+        -- NOT i3's focus_follows_mouse=no: with follow_mouse = 0 Hyprland never
+        -- hands pointer focus to a window that isn't focused, so the wheel
+        -- (and hover) go to the focused window only. 2 (loose) keeps the i3
+        -- feel of not refocusing on every twitch but lets a hovered window
+        -- receive the scroll. Use 1 for "focus on every mouse move".
+        follow_mouse       = 2,
+        -- Only refocus when the cursor actually crosses into another window.
+        mouse_refocus      = false,
 
         sensitivity = 0,
         touchpad    = { natural_scroll = false },
