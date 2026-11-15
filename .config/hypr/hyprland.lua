@@ -6,6 +6,21 @@
 
 local mod = "SUPER"
 local terminal = "ghostty"
+local home = os.getenv("HOME") or ""
+
+-- Nix installs the desktop tools (waybar, dex, swaybg, flameshot, pavucontrol,
+-- …) into ~/.nix-profile/bin. Hyprland is normally launched by a display
+-- manager, and a DM-launched Wayland session does not source ~/.xprofile — the
+-- file that adds that directory to $PATH for the i3 session — so the autostart
+-- entries below would fail with "command not found". Prepend it once here;
+-- every process Hyprland spawns (autostart and keybinds) inherits this PATH.
+-- Guard against duplicate entries when the config is reloaded.
+local nix_profile_bin = home .. "/.nix-profile/bin"
+local session_path = os.getenv("PATH") or "/usr/local/bin:/usr/bin:/bin"
+if not session_path:find(nix_profile_bin, 1, true) then
+	hl.env("PATH", nix_profile_bin .. ":" .. session_path)
+end
+
 -- NOTE: wofi populates its list one entry per main-loop iteration, so right
 -- after opening, entries far down $PATH (~/.nix-profile, /usr/bin, ...) are
 -- not yet in the list. Typing + Enter still works thanks to --exec-search.
@@ -129,9 +144,9 @@ hl.on("hyprland.start", function()
 	-- Hyprland never reads XDG autostart entries on its own, so every app that
 	-- only ships a ~/.config/autostart/*.desktop file (1Password, Proton Mail
 	-- Bridge, gnome-keyring, caffeine, …) silently never starts without dex.
-	-- dex comes from nix (~/.nix-profile/bin) and a DM-launched Wayland session
-	-- does not source ~/.xprofile — the file that puts that directory on $PATH
-	-- for the i3 session — so prepend it here instead of relying on inheritance.
+	-- dex lives in ~/.nix-profile/bin. The session PATH is fixed at the top of
+	-- this file, but keep the explicit prefix here so autostart still works if
+	-- Hyprland is ever started with a PATH that bypasses hl.env.
 	hl.exec_cmd('env PATH="$HOME/.nix-profile/bin:$PATH" dex --autostart --environment Hyprland')
 
 	-- Optional session startup hook (skip cleanly if it does not exist).
@@ -140,8 +155,25 @@ hl.on("hyprland.start", function()
 	-- Bar (waybar stands in for i3bar/i3status-rs), notifications, tray.
 	-- A host overlay may ship ~/.config/waybar/host.jsonc (a full config that
 	-- includes the shared config.jsonc) to drop modules for hardware the
-	-- machine does not have, e.g. bluetooth/backlight on the desktop.
-	hl.exec_cmd("[ -f ~/.config/waybar/host.jsonc ] && exec waybar -c ~/.config/waybar/host.jsonc || exec waybar")
+	-- machine does not have, e.g. bluetooth/backlight on the desktop. Resolve
+	-- it in Lua (like the host.d/*.lua overlays) instead of a shell `exec`
+	-- chain: with `exec`, a Waybar that exits on a bad host config would leave
+	-- the session without a bar and never reach the fallback.
+	local waybar_bin = "waybar"
+	local nix_waybar = nix_profile_bin .. "/waybar"
+	local nix_waybar_fh = io.open(nix_waybar, "r")
+	if nix_waybar_fh then
+		nix_waybar_fh:close()
+		waybar_bin = nix_waybar
+	end
+	local waybar = waybar_bin
+	local waybar_host = home .. "/.config/waybar/host.jsonc"
+	local waybar_host_fh = io.open(waybar_host, "r")
+	if waybar_host_fh then
+		waybar_host_fh:close()
+		waybar = waybar_bin .. ' -c "' .. waybar_host .. '" || ' .. waybar_bin
+	end
+	hl.exec_cmd(waybar)
 	hl.exec_cmd("dunst")
 	-- `--indicator` (AppIndicator/SNI) is the only tray mode Waybar displays;
 	-- the bare `nm-applet` from /etc/xdg/autostart paints an XEmbed icon Waybar
