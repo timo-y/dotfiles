@@ -259,7 +259,9 @@ hl.bind(mod .. " + SHIFT + V", hl.dsp.layout("togglesplit"))
 -- there is no tiling<->floating focus switch.
 
 -- ── Fullscreen / floating ──────────────────────────────────────────────────
-hl.bind(mod .. " + F", hl.dsp.window.fullscreen({ action = "toggle" }))
+-- Maximize instead of real fullscreen: fills the workspace but keeps gaps/bar
+-- and does not tell the client it is fullscreen, so browser tabs/URL bar stay.
+hl.bind(mod .. " + F", hl.dsp.window.fullscreen({ action = "toggle", mode = "maximized" }))
 hl.bind(mod .. " + SHIFT + F", hl.dsp.window.float({ action = "toggle" }))
 
 -- ── Reload / exit (i3: reload, restart, exit) ──────────────────────────────
